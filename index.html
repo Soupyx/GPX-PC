@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" sizes="32x32" href="logo/Logo.png" />
+    <link rel="apple-touch-icon" href="logo/Logo.png" />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+      };
+    </script>
+    <title>Accueil – GPX Gaming Power Xperience</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow-y: scroll; /* force scrollbar verticale même si pas nécessaire */
+      }
+    </style>
+  </head>
+
+  <body
+    class="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 transition-colors duration-500"
+  >
+    <header
+      class="bg-white dark:bg-gray-800 shadow transition-colors duration-500 relative"
+    >
+      <div
+        class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-4"
+      >
+        <!-- Logo -->
+        <a href="index.html" class="block flex-shrink-0">
+          <img
+            src="logo/Logo.png"
+            alt="GPX PC - Gaming Power Xperience"
+            class="h-16 sm:h-24"
+          />
+        </a>
+        <h1 class="sr-only">GPX PC - Gaming Power Xperience</h1>
+
+        <div class="flex items-center gap-6 sm:gap-12 lg:gap-20 ml-auto">
+          <!-- Bouton Nos Configurations -->
+          <a
+            href="pcs.php"
+            class="hidden sm:inline-block group relative px-6 py-3 bg-gradient-to-r from-[#3857cb] to-[#2c469f] border-2 border-transparent text-white font-bold tracking-wide overflow-visible transition-all duration-300 ease-in-out hover:from-[#2c469f] hover:to-[#3857cb]"
+          >
+            <span
+              class="absolute top-[-2px] left-[0.625rem] h-[2px] w-[1.5625rem] bg-gray-200 transition-all duration-500 ease-out group-hover:left-[-2px] group-hover:w-0"
+            ></span>
+            <span
+              class="absolute top-1/2 left-[1.5rem] -translate-y-1/2 h-[2px] w-[1.5625rem] bg-black transition-all duration-300 ease-linear group-hover:w-[0.9375rem] group-hover:bg-white"
+            ></span>
+            <span
+              class="block ml-[2em] text-[1.125em] leading-[1.3333em] uppercase"
+            >
+              Nos configurations
+            </span>
+            <span
+              class="absolute bottom-[-2px] right-[1.875rem] h-[2px] w-[1.5625rem] bg-gray-200 transition-all duration-500 ease-out group-hover:right-0 group-hover:w-0"
+            ></span>
+            <span
+              class="absolute bottom-[-2px] right-[0.625rem] h-[2px] w-[0.625rem] bg-gray-200 transition-all duration-500 ease-out group-hover:right-0 group-hover:w-0"
+            ></span>
+          </a>
+
+          <!-- Bouton Me contacter -->
+          <a
+            href="contact.php"
+            class="hidden sm:inline-block group relative px-6 py-3 bg-gradient-to-r from-[#3857cb] to-[#2c469f] border-2 border-transparent text-white font-bold tracking-wide overflow-visible transition-all duration-300 ease-in-out hover:from-[#2c469f] hover:to-[#3857cb]"
+          >
+            <span
+              class="absolute top-[-2px] left-[0.625rem] h-[2px] w-[1.5625rem] bg-gray-200 transition-all duration-500 ease-out group-hover:left-[-2px] group-hover:w-0"
+            ></span>
+            <span
+              class="absolute top-1/2 left-[1.5rem] -translate-y-1/2 h-[2px] w-[1.5625rem] bg-black transition-all duration-300 ease-linear group-hover:w-[0.9375rem] group-hover:bg-white"
+            ></span>
+            <span
+              class="block ml-[2em] text-[1.125em] leading-[1.3333em] uppercase"
+            >
+              Me contacter
+            </span>
+            <span
+              class="absolute bottom-[-2px] right-[1.875rem] h-[2px] w-[1.5625rem] bg-gray-200 transition-all duration-500 ease-out group-hover:right-0 group-hover:w-0"
+            ></span>
+            <span
+              class="absolute bottom-[-2px] right-[0.625rem] h-[2px] w-[0.625rem] bg-gray-200 transition-all duration-500 ease-out group-hover:right-0 group-hover:w-0"
+            ></span>
+          </a>
+
+          <!-- Switch Dark Mode -->
+          <label class="w-24 h-9 flex-shrink-0 relative">
+            <input type="checkbox" id="dark-toggle" class="peer hidden" />
+            <span
+              class="absolute inset-0 bg-gray-800 rounded-full transition-colors duration-500 peer-checked:bg-purple-600 cursor-pointer"
+            ></span>
+            <span
+              id="mode-text"
+              class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white font-semibold text-xs transition-all duration-500 peer-checked:left-[40%]"
+            >
+              Dark
+            </span>
+            <span
+              class="absolute left-0 top-1/2 -translate-y-1/2 h-8 w-8 bg-white rounded-full shadow transition-all duration-500 peer-checked:left-[68%] peer-checked:rotate-[360deg] peer-checked:outline peer-checked:outline-[6px] peer-checked:outline-white/30"
+            >
+              <span
+                class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-gray-800 dark:text-white"
+              >
+                <svg
+                  class="w-5 h-5"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M8 18V6l8 6-8 6Z"
+                  />
+                </svg>
+              </span>
+            </span>
+          </label>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main -->
+    <main
+      class="flex-grow bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100"
+    >
+      <!-- Hero -->
+      <section
+        class="bg-gradient-to-r from-[#3857cb] to-[#2c469f] text-white text-center py-20 px-6"
+      >
+        <h2 class="text-4xl sm:text-5xl font-extrabold mb-4 drop-shadow-lg">
+          Ton expert PC sur mesure
+        </h2>
+        <p class="text-lg sm:text-xl mb-6">
+          Assemblage, réparation et upgrades pour tous tes besoins
+          informatiques.
+        </p>
+      </section>
+
+      <!-- Services -->
+      <section class="py-16 px-6 max-w-6xl mx-auto">
+        <h3
+          class="text-3xl font-bold text-[#3857cb] dark:text-blue-400 text-center mb-12"
+        >
+          Mes services
+        </h3>
+        <div class="grid gap-8 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+          <!-- Bloc 1 -->
+          <div
+            class="group cursor-default bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg p-6 text-center transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:border-[#3857cb] hover:bg-gray-50 dark:hover:bg-gray-700"
+          >
+            <h4
+              class="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100 transition-colors duration-300 group-hover:text-[#3857cb]"
+            >
+              Assemblage PC
+            </h4>
+            <p
+              class="text-gray-500 dark:text-gray-400 transition-colors duration-300 group-hover:text-gray-700 dark:group-hover:text-gray-200"
+            >
+              Conception et montage selon vos besoins.
+            </p>
+          </div>
+
+          <!-- Bloc 2 -->
+          <div
+            class="group cursor-default bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg p-6 text-center transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:border-[#3857cb] hover:bg-gray-50 dark:hover:bg-gray-700"
+          >
+            <h4
+              class="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100 transition-colors duration-300 group-hover:text-[#3857cb]"
+            >
+              Réparation & Dépannage
+            </h4>
+            <p
+              class="text-gray-500 dark:text-gray-400 transition-colors duration-300 group-hover:text-gray-700 dark:group-hover:text-gray-200"
+            >
+              Diagnostic et remplacement de composants.
+            </p>
+          </div>
+
+          <!-- Bloc 3 -->
+          <div
+            class="group cursor-default bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg p-6 text-center transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:border-[#3857cb] hover:bg-gray-50 dark:hover:bg-gray-700"
+          >
+            <h4
+              class="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100 transition-colors duration-300 group-hover:text-[#3857cb]"
+            >
+              Optimisation
+            </h4>
+            <p
+              class="text-gray-500 dark:text-gray-400 transition-colors duration-300 group-hover:text-gray-700 dark:group-hover:text-gray-200"
+            >
+              Overclocking, undervolting et optimisation global du système.
+            </p>
+          </div>
+
+          <!-- Bloc 4 -->
+          <div
+            class="group cursor-default bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg p-6 text-center transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:border-[#3857cb] hover:bg-gray-50 dark:hover:bg-gray-700"
+          >
+            <h4
+              class="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100 transition-colors duration-300 group-hover:text-[#3857cb]"
+            >
+              Récupération de données
+            </h4>
+            <p
+              class="text-gray-500 dark:text-gray-400 transition-colors duration-300 group-hover:text-gray-700 dark:group-hover:text-gray-200"
+            >
+              Sauvegarde de fichiers sur HDD, SSD, clés USB.
+            </p>
+          </div>
+
+          <!-- Bloc 5 -->
+          <div
+            class="group cursor-default bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg p-6 text-center transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:border-[#3857cb] hover:bg-gray-50 dark:hover:bg-gray-700"
+          >
+            <h4
+              class="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100 transition-colors duration-300 group-hover:text-[#3857cb]"
+            >
+              Installation OS
+            </h4>
+            <p
+              class="text-gray-500 dark:text-gray-400 transition-colors duration-300 group-hover:text-gray-700 dark:group-hover:text-gray-200"
+            >
+              Windows, Linux ou autre, configuré sur mesure.
+            </p>
+          </div>
+
+          <!-- Bloc 6 -->
+          <div
+            class="group cursor-default bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg p-6 text-center transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:border-[#3857cb] hover:bg-gray-50 dark:hover:bg-gray-700"
+          >
+            <h4
+              class="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100 transition-colors duration-300 group-hover:text-[#3857cb]"
+            >
+              Installation de logiciels
+            </h4>
+            <p
+              class="text-gray-500 dark:text-gray-400 transition-colors duration-300 group-hover:text-gray-700 dark:group-hover:text-gray-200"
+            >
+              Microsoft 365, Suite Adobe, etc.. prêts à l’emploi.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Devis -->
+      <section
+        id="devis"
+        class="bg-gradient-to-r from-[#3857cb] to-[#2c469f] py-16 px-6"
+      >
+        <div class="max-w-4xl mx-auto text-center">
+          <h3 class="text-3xl font-bold text-white mb-4">
+            Demandez votre devis gratuit
+          </h3>
+          <p class="text-gray-200 mb-6">
+            Décrivez votre projet et recevez une estimation personnalisée,
+            rapide et sans engagement.
+          </p>
+          <a
+            href="devis.php"
+            class="group relative inline-block px-8 py-4 bg-transparent border-2 border-white font-bold tracking-wide overflow-visible transition-all duration-300 ease-in-out hover:bg-white hover:text-[#3857cb]"
+          >
+            <span
+              class="absolute top-[-2px] left-[0.625rem] h-[2px] w-[1.5625rem] bg-gray-200 transition-all duration-500 ease-out group-hover:left-[-2px] group-hover:w-0"
+            ></span>
+            <span
+              class="absolute top-1/2 left-[1.5rem] -translate-y-1/2 h-[2px] w-[1.5625rem] bg-black transition-all duration-300 ease-linear group-hover:w-[0.9375rem] group-hover:bg-white"
+            ></span>
+            <span
+              class="block ml-[2em] text-[1.125em] leading-[1.3333em] uppercase transition-all duration-300 ease-in-out group-hover:pl-[1.5em] group-hover:text-[#3857cb]"
+            >
+              Obtenir un devis
+            </span>
+            <span
+              class="absolute bottom-[-2px] right-[1.875rem] h-[2px] w-[1.5625rem] bg-gray-200 transition-all duration-500 ease-out group-hover:right-0 group-hover:w-0"
+            ></span>
+            <span
+              class="absolute bottom-[-2px] right-[0.625rem] h-[2px] w-[0.625rem] bg-gray-200 transition-all duration-500 ease-out group-hover:right-0 group-hover:w-0"
+            ></span>
+          </a>
+        </div>
+      </section>
+
+      <!-- À propos -->
+      <section class="bg-white dark:bg-gray-800 py-16 px-6">
+        <div class="max-w-3xl mx-auto text-center">
+          <h3 class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+            À propos de moi
+          </h3>
+          <p class="text-gray-500 dark:text-gray-400 mb-4">
+            Passionné d’informatique, je construis et répare des PC depuis plus
+            de 5 ans.
+          </p>
+          <p class="text-gray-500 dark:text-gray-400">
+            Gamer, créateur ou pro, je t’accompagne avec un service sur-mesure,
+            transparent et rapide.
+          </p>
+        </div>
+      </section>
+
+      <section
+        id="devis"
+        class="bg-gradient-to-r from-[#3857cb] to-[#2c469f] py-16 px-6"
+      >
+        <div class="max-w-2xl mx-auto text-center">
+          <h3 class="text-3xl font-bold text-white mb-4">
+            Prêt à donner vie à votre projet ?
+          </h3>
+          <a
+            href="contact.php"
+            class="group relative inline-block px-8 py-4 bg-transparent border-2 border-white font-bold tracking-wide overflow-visible transition-all duration-300 ease-in-out hover:bg-white hover:text-[#3857cb]"
+          >
+            <span
+              class="absolute top-[-2px] left-[0.625rem] h-[2px] w-[1.5625rem] bg-gray-200 transition-all duration-500 ease-out group-hover:left-[-2px] group-hover:w-0"
+            ></span>
+            <span
+              class="absolute top-1/2 left-[1.5rem] -translate-y-1/2 h-[2px] w-[1.5625rem] bg-black transition-all duration-300 ease-linear group-hover:w-[0.9375rem] group-hover:bg-white"
+            ></span>
+            <span
+              class="block ml-[2em] text-[1.125em] leading-[1.3333em] uppercase transition-all duration-300 ease-in-out group-hover:pl-[1.5em] group-hover:text-[#3857cb]"
+            >
+              Me contacter
+            </span>
+            <span
+              class="absolute bottom-[-2px] right-[1.875rem] h-[2px] w-[1.5625rem] bg-gray-200 transition-all duration-500 ease-out group-hover:right-0 group-hover:w-0"
+            ></span>
+            <span
+              class="absolute bottom-[-2px] right-[0.625rem] h-[2px] w-[0.625rem] bg-gray-200 transition-all duration-500 ease-out group-hover:right-0 group-hover:w-0"
+            ></span>
+          </a>
+        </div>
+      </section>
+    </main>
+    <footer
+      class="bg-black dark:bg-gray-950 text-gray-400 dark:text-gray-500 py-8 transition-colors duration-500"
+    >
+      <div
+        class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center"
+      >
+        <a href="index.html" class="block mb-6 sm:mb-0">
+          <img src="logo/Logo.png" alt="GPX PC Logo" class="h-12 sm:h-16" />
+        </a>
+        <nav class="flex gap-8">
+          <a href="index.html" class="hover:text-white transition">Accueil</a>
+          <a href="devis.php" class="hover:text-white transition">Devis</a>
+          <a href="contact.php" class="hover:text-white transition">Contact</a>
+        </nav>
+        <p class="mt-6 sm:mt-0 text-xs text-gray-600 dark:text-gray-400">
+          &copy; 2025 Soupyx PC Services
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      const toggle = document.getElementById("dark-toggle");
+      const modeText = document.getElementById("mode-text");
+
+      // Charger la préférence
+      if (localStorage.theme === "dark") {
+        document.documentElement.classList.add("dark");
+        toggle.checked = true;
+        modeText.textContent = "Light";
+      }
+
+      toggle.addEventListener("change", () => {
+        if (toggle.checked) {
+          document.documentElement.classList.add("dark");
+          localStorage.theme = "dark";
+          modeText.textContent = "Light";
+        } else {
+          document.documentElement.classList.remove("dark");
+          localStorage.theme = "light";
+          modeText.textContent = "Dark";
+        }
+      });
+      if (storedTheme === "light") {
+        document.documentElement.classList.remove("dark");
+      } else {
+        document.documentElement.classList.add("dark");
+      }
+    </script>
+  </body>
+</html>
