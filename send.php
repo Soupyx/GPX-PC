@@ -2,6 +2,28 @@
 
 declare(strict_types=1);
 
+require 'config.php';  // contient RECAPTCHA_SITE_KEY et RECAPTCHA_SECRET_KEY
+
+// 1. Récupérer la réponse reCAPTCHA
+$response = $_POST['g-recaptcha-response'] ?? '';
+
+// 2. Vérifier auprès de Google
+$verifyUrl = 'https://www.google.com/recaptcha/api/siteverify'
+           . '?secret='   . urlencode(RECAPTCHA_SECRET_KEY)
+           . '&response=' . urlencode($response)
+           . '&remoteip=' . $_SERVER['REMOTE_ADDR'];
+
+$result     = file_get_contents($verifyUrl);
+$data       = json_decode($result);
+
+// 3. Contrôler le succès
+if (empty($data->success) || $data->success !== true) {
+    die('Erreur reCAPTCHA : cochez “Je ne suis pas un robot”.');
+}
+
+// 4. Si captcha validé, traiter le formulaire
+$formType = $_POST['form_type'] ?? 'contact';
+
 // -----------------------------------------------------------------------------
 // CONFIGURATION
 // -----------------------------------------------------------------------------
