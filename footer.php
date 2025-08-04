@@ -1,17 +1,21 @@
-  <footer
-    class="bg-black dark:bg-gray-950 text-gray-400 dark:text-gray-500 py-8 transition-colors duration-500">
-    <div
-      class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center">
-      <a href="index.php" class="block mb-6 sm:mb-0">
-        <img src="logo/Logo.png" alt="GPX PC Logo" class="h-12 sm:h-16" />
-      </a>
-      <nav class="flex gap-8">
-        <a href="index.html" class="hover:text-white transition">Accueil</a>
-        <a href="devis.php" class="hover:text-white transition">Devis</a>
-        <a href="contact.php" class="hover:text-white transition">Contact</a>
-      </nav>
-      <p class="mt-6 sm:mt-0 text-xs text-gray-600 dark:text-gray-400">
-        &copy; 2025 Soupyx PC Services
-      </p>
-    </div>
-  </footer>
+<footer class="bg-black dark:bg-gray-950 text-gray-400 dark:text-gray-500 transition-colors duration-500 py-8">
+  <div class="container mx-auto px-4 flex flex-col items-center gap-8 sm:flex-row sm:justify-between sm:items-center">
+    
+    <a href="index.php" class="block">
+      <img src="logo/Logo.png" alt="GPX PC Logo" class="h-12 sm:h-16" />
+    </a>
+    
+    <nav class="flex flex-wrap justify-center gap-6">
+      <a href="index.php"      class="hover:text-white transition-colors">Accueil</a>
+      <a href="pcs.php"        class="hover:text-white transition-colors">Nos configurations</a>
+      <a href="pcs.php"        class="hover:text-white transition-colors">Réparation & Entretien</a>
+      <a href="devis.php"      class="hover:text-white transition-colors">Devis</a>
+      <a href="contact.php"    class="hover:text-white transition-colors">Contact</a>
+    </nav>
+    
+    <p class="text-xs text-gray-600 dark:text-gray-400 text-center sm:text-right">
+      &copy; 2025 GPX PC Services
+    </p>
+  
+  </div>
+</footer>

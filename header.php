@@ -20,7 +20,6 @@ $pageDescription = $pageDescription ?? "GPX PC : Montage, réparation et livrais
     <meta name="description" content="<?= htmlspecialchars($pageDescription) ?>">
     <link rel="icon" type="image/png" sizes="32x32" href="logo/Logo.png">
     <link rel="apple-touch-icon" href="logo/Logo.png">
-
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <script>
@@ -29,20 +28,6 @@ $pageDescription = $pageDescription ?? "GPX PC : Montage, réparation et livrais
         };
     </script>
     <style>
-        @keyframes fly {
-            from {
-                transform: translateY(0.1em);
-            }
-
-            to {
-                transform: translateY(-0.1em);
-            }
-        }
-
-        .fly-yoyo {
-            animation: fly 0.6s ease-in-out infinite alternate;
-        }
-
         html,
         body {
             margin: 0;
@@ -196,7 +181,7 @@ $pageDescription = $pageDescription ?? "GPX PC : Montage, réparation et livrais
                     Nos configurations
                 </a>
                 <a href="reparation.php" class="text-2xl font-bold text-gray-800 dark:text-gray-200">
-                    Réparation
+                    Réparation & Entretien
                 </a>
                 <a href="contact.php" class="text-2xl font-bold text-gray-800 dark:text-gray-200">
                     Me contacter

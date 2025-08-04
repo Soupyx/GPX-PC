@@ -1,16 +1,28 @@
 <?php
-session_start();
-if (empty($_SESSION['csrf_token'])) {
-  $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-}
-
 require_once __DIR__ . '/config.php';
 
 // 🔹 Variables pour le header dynamique
 $pageTitle = "Demande de devis gratuit | GPX PC";
 $pageDescription = "Remplissez notre formulaire pour obtenir une estimation personnalisée pour votre PC, avec assemblage, optimisation et livraison en France.";
+
 include 'header.php';
 ?>
+
+<style>
+  @keyframes fly {
+    from {
+      transform: translateY(0.1em);
+    }
+
+    to {
+      transform: translateY(-0.1em);
+    }
+  }
+
+  .fly-yoyo {
+    animation: fly 0.6s ease-in-out infinite alternate;
+  }
+</style>
 
 <!-- Main -->
 <main class="flex-grow bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-200">
@@ -93,8 +105,8 @@ include 'header.php';
             ["Overclocking CPU (Si le modèle convient)", 25],
           ];
           foreach ($services as [$label, $price]): ?>
-            <label class="flex items-center justify-between gap-4 p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition">
-              <div class="flex items-center gap-3">
+            <label class="flex items-center justify-between gap-4 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition">
+              <div class="flex items-center gap-2">
                 <input type="checkbox" name="services[]" value="<?= htmlspecialchars($label) ?>"
                   class="form-checkbox h-5 w-5 text-green-400 bg-white dark:bg-gray-900
                               border-gray-300 dark:border-gray-700 rounded transition-colors" />
@@ -107,7 +119,7 @@ include 'header.php';
           <!-- Champs cachés -->
           <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
           <input type="hidden" name="formType" value="devis">
-          <div class="g-recaptcha" data-sitekey="<?= RECAPTCHA_SITE_KEY; ?>"></div>
+          <div class="g-recaptcha pt-4" data-sitekey="<?= RECAPTCHA_SITE_KEY; ?>"></div>
 
           <!-- Bouton d’envoi -->
           <div class="flex justify-center">

@@ -5,9 +5,24 @@ $pageDescription = "Faites réparer et entretenir votre PC avec GPX PC. Nettoyag
 include 'header.php';
 ?>
 
-<!-- Main -->
+<style>
+  @keyframes fly {
+    from {
+      transform: translateY(0.1em);
+    }
+
+    to {
+      transform: translateY(-0.1em);
+    }
+  }
+
+  .fly-yoyo {
+    animation: fly 0.6s ease-in-out infinite alternate;
+  }
+</style>
+
 <main class="flex-grow bg-gray-50 dark:bg-gray-900 transition-colors duration-500">
-  <section class="py-16 px-6 bg-gray-50 dark:bg-gray-900 transition-colors duration-500">
+  <section class="py-16 px-6">
     <div class="max-w-2xl mx-auto bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 shadow-lg rounded-lg overflow-hidden transition-colors duration-500">
 
       <!-- En-tête -->
@@ -21,12 +36,12 @@ include 'header.php';
       </div>
 
       <!-- Formulaire -->
-      <div class="px-6">
+      <div class="px-6 pb-2">
         <form id="reparationForm" action="send.php" method="POST" novalidate class="space-y-6">
 
           <!-- Nom -->
           <div>
-            <label for="name" class="block text-gray-700 dark:text-gray-300 mb-1">Nom</label>
+            <label for="name" class="block text-gray-700 dark:text-gray-300 mb-1">Nom complet</label>
             <input
               type="text"
               id="name"
@@ -50,9 +65,63 @@ include 'header.php';
               class="w-full bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 border border-gray-300 dark:border-gray-700 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#3857cb] dark:focus:ring-blue-400 transition-colors" />
           </div>
 
+          <!-- Type de PC -->
+          <div>
+            <label class="block text-gray-700 dark:text-gray-300 mb-1">Type de PC</label>
+            <select
+              id="pc_type"
+              name="pc_type"
+              required
+              class="w-full bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-700 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#3857cb] dark:focus:ring-blue-400 transition-colors">
+              <option value="">-- Sélectionne --</option>
+              <option value="PC Fixe">PC Fixe</option>
+              <option value="PC Portable">PC Portable</option>
+            </select>
+            <p id="portableWarning" class="hidden mt-2 text-sm text-yellow-600 dark:text-yellow-400">
+              ⚠️ Attention : Pour les PC portables, certaines interventions matérielles complexes (comme un démontage complet ou un remplacement de composants internes) peuvent être difficiles ou impossibles à réaliser. Nous privilégions les services logiciels, le nettoyage léger et les réparations simples afin de garantir la sécurité de votre appareil.
+            </p>
+          </div>
+
+          <!-- Urgence -->
+          <div>
+            <label for="urgency" class="block text-gray-700 dark:text-gray-300 mb-1">Urgence de la réparation</label>
+            <select
+              id="urgency"
+              name="urgency"
+              required
+              class="w-full bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-700 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#3857cb] dark:focus:ring-blue-400 transition-colors">
+              <option value="">-- Sélectionne --</option>
+              <option value="Normale">Normale</option>
+              <option value="Urgente">Urgente</option>
+            </select>
+          </div>
+
+          <!-- Services demandés -->
+          <div>
+            <label class="block text-gray-700 dark:text-gray-300 mb-1">Service souhaité</label>
+            <div class="space-y-2">
+              <label class="flex items-center gap-2">
+                <input type="checkbox" name="services[]" value="Nettoyage complet" class="accent-[#3857cb]">
+                Nettoyage complet / dépoussiérage
+              </label>
+              <label class="flex items-center gap-2">
+                <input type="checkbox" name="services[]" value="Changement de composants" class="accent-[#3857cb]">
+                Changement de composants (RAM, SSD, GPU…)
+              </label>
+              <label class="flex items-center gap-2">
+                <input type="checkbox" name="services[]" value="Réinstallation Windows" class="accent-[#3857cb]">
+                Réinstallation ou optimisation Windows
+              </label>
+              <label class="flex items-center gap-2">
+                <input type="checkbox" name="services[]" value="Autre" class="accent-[#3857cb]">
+                Autre (préciser ci-dessous)
+              </label>
+            </div>
+          </div>
+
           <!-- Message -->
           <div>
-            <label for="message" class="block text-gray-700 dark:text-gray-300 mb-1">Message</label>
+            <label for="message" class="block text-gray-700 dark:text-gray-300 mb-1">Message détaillé</label>
             <textarea
               id="message"
               name="message"
@@ -62,12 +131,12 @@ include 'header.php';
               class="w-full bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 border border-gray-300 dark:border-gray-700 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#3857cb] dark:focus:ring-blue-400 transition-colors"></textarea>
           </div>
 
-          <!-- CSRF -->
+          <!-- CSRF + formType + reCAPTCHA -->
           <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>" />
+          <input type="hidden" name="formType" value="reparation">
+          <div class="g-recaptcha" data-sitekey="<?php echo RECAPTCHA_SITE_KEY; ?>" ></div>
 
-          <div class="g-recaptcha" data-sitekey="<?php echo RECAPTCHA_SITE_KEY; ?>"></div>
-
-          <!-- Bouton identique -->
+          <!-- Bouton -->
           <div class="flex justify-center">
             <button
               type="submit"
@@ -107,50 +176,53 @@ include 'header.php';
 <?php include 'footer.php'; ?>
 
 <script>
-  // Formulaire AJAX
-  const form = document.getElementById("reparationForm");
-  const btnContent = document.getElementById("btnContent");
-  const btnLoader = document.getElementById("btnLoader");
-  const msgBox = document.getElementById("responseMessage");
-  const sendBtn = document.getElementById("sendBtn");
-
-  form.addEventListener("submit", e => {
-    e.preventDefault();
-    btnContent.classList.add("hidden");
-    btnLoader.classList.remove("hidden");
-    sendBtn.disabled = true;
-
-    fetch(form.action, {
-        method: "POST",
-        headers: {
-          Accept: "application/json"
-        },
-        body: new FormData(form),
-      })
-      .then(res => {
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        return res.json();
-      })
-      .then(data => {
-        afficherMessage(data.status, data.message);
-        if (data.status === "success") form.reset();
-      })
-      .catch(err => {
-        afficherMessage("error", "Erreur réseau ou validation.");
-        console.error(err);
-      })
-      .finally(() => {
-        btnLoader.classList.add("hidden");
-        btnContent.classList.remove("hidden");
-        sendBtn.disabled = false;
-      });
+  // Avertissement dynamique pour PC portable
+  document.getElementById("pc_type").addEventListener("change", function() {
+    document.getElementById("portableWarning").classList.toggle(
+      "hidden",
+      this.value !== "PC Portable"
+    );
   });
 
-  function afficherMessage(status, message) {
-    msgBox.innerText = message;
-    msgBox.className =
-      status === "success" ?
-      "mt-4 text-green-200 bg-green-800 border border-green-600 p-3 rounded" :
-      "mt-4 text-red-200 bg-red-800 border border-red-600 p-3 rounded";
-  }
+document.getElementById("reparationForm").addEventListener("submit", function(e) {
+  e.preventDefault(); // Empêche l'envoi classique
+
+  const form = e.target;
+  const formData = new FormData(form);
+
+  // Afficher loader
+  document.getElementById("btnContent").style.opacity = "0.5";
+  document.getElementById("btnLoader").classList.remove("hidden");
+
+  fetch(form.action, {
+    method: "POST",
+    body: formData
+  })
+  .then(response => response.json())
+  .then(data => {
+    // Réinitialiser le bouton
+    document.getElementById("btnContent").style.opacity = "1";
+    document.getElementById("btnLoader").classList.add("hidden");
+
+    const msg = document.getElementById("responseMessage");
+    if (data.status === "success") {
+      msg.textContent = "✅ Message envoyé avec succès !";
+      msg.className = "mt-6 text-center font-medium text-green-600 dark:text-green-400";
+      form.reset();
+      grecaptcha.reset(); // reset reCAPTCHA
+    } else {
+      msg.textContent = "❌ " + data.message;
+      msg.className = "mt-6 text-center font-medium text-red-600 dark:text-red-400";
+    }
+  })
+  .catch(() => {
+    document.getElementById("btnContent").style.opacity = "1";
+    document.getElementById("btnLoader").classList.add("hidden");
+
+    const msg = document.getElementById("responseMessage");
+    msg.textContent = "❌ Erreur réseau. Veuillez réessayer.";
+    msg.className = "mt-6 text-center font-medium text-red-600 dark:text-red-400";
+  });
+});
+
 </script>
