@@ -6,51 +6,66 @@ $prefilledMessage = $selectedPC
   ? "Bonjour, je souhaite acheter le PC \"$selectedPC\" est-il toujours disponible ?"
   : '';
 
-// Définition du titre et description pour le header
 $pageTitle = "Contact – GPX PC | Assemblage & Réparation PC en France";
-$pageDescription = "Besoin d’un renseignement sur nos services de montage ou réparation de PC à Marseille ? GPX PC assemble vos ordinateurs à Marseille et les livre partout en France.";
+$pageDescription = "Contactez GPX PC pour vos questions sur le montage, la réparation ou l’entretien d’ordinateurs à Marseille. Assemblage et livraison partout en France.";
 
 include 'header.php';
 ?>
 
+<!-- JSON-LD pour Google -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "GPX PC",
+  "description": "Contactez GPX PC pour vos demandes de montage et réparation de PC, à Marseille et livraison partout en France.",
+  "url": "https://ton-site.fr/contact.php",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Marseille",
+    "addressCountry": "FR"
+  },
+  "areaServed": {
+    "@type": "Place",
+    "name": "France"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "customer support",
+    "availableLanguage": "French"
+  }
+}
+</script>
+
 <style>
   @keyframes fly {
-    from {
-      transform: translateY(0.1em);
-    }
-
-    to {
-      transform: translateY(-0.1em);
-    }
+    from { transform: translateY(0.1em); }
+    to { transform: translateY(-0.1em); }
   }
-
-  .fly-yoyo {
-    animation: fly 0.6s ease-in-out infinite alternate;
-  }
+  .fly-yoyo { animation: fly 0.6s ease-in-out infinite alternate; }
 </style>
 
 <main class="flex-grow bg-gray-50 dark:bg-gray-900 transition-colors duration-500">
-  <section class="py-16 px-6 bg-gray-50 dark:bg-gray-900 transition-colors duration-500">
-    <div
-      class="max-w-2xl mx-auto bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 shadow-lg rounded-lg overflow-hidden transition-colors duration-500">
+  <section class="py-16 px-6">
+    <div class="max-w-2xl mx-auto bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 shadow-lg rounded-lg overflow-hidden transition-colors duration-500">
 
       <!-- En-tête -->
       <div class="px-8 py-12 text-center">
-        <h2 class="text-4xl sm:text-5xl font-extrabold text-[#3857cb] dark:text-blue-400 mb-4 drop-shadow-lg">
+        <h1 class="text-4xl sm:text-5xl font-extrabold text-[#3857cb] dark:text-blue-400 mb-4 drop-shadow-lg">
           Contactez-moi
-        </h2>
-        <p class="text-lg sm:text-xl text-gray-500 dark:text-gray-400">
-          Remplis ce formulaire pour m’envoyer un message.
+        </h1>
+        <p class="text-lg sm:text-xl text-gray-500 dark:text-gray-400 max-w-xl mx-auto">
+          Remplissez ce formulaire pour toute question ou demande d’information concernant nos services de montage et réparation PC.
         </p>
       </div>
 
       <!-- Formulaire -->
       <div class="px-6">
-        <form id="contactForm" action="send.php" method="POST" novalidate class="space-y-6">
+        <form id="contactForm" action="send.php" method="POST" novalidate class="space-y-6" aria-label="Formulaire de contact GPX PC">
 
           <!-- Nom -->
           <div>
-            <label for="name" class="block text-gray-700 dark:text-gray-300 mb-1">Nom</label>
+            <label for="name" class="block text-gray-700 dark:text-gray-300 mb-1">Nom complet</label>
             <input type="text" id="name" name="name" placeholder="Ton nom complet" required autocomplete="name"
               class="w-full bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500
               border border-gray-300 dark:border-gray-700 rounded-md px-4 py-2
@@ -75,13 +90,13 @@ include 'header.php';
               focus:outline-none focus:ring-2 focus:ring-[#3857cb] dark:focus:ring-blue-400 transition-colors"><?= htmlspecialchars($prefilledMessage) ?></textarea>
           </div>
 
-          <!-- CSRF -->
+          <!-- CSRF + reCAPTCHA -->
           <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
           <div class="g-recaptcha" data-sitekey="<?= RECAPTCHA_SITE_KEY ?>"></div>
 
           <!-- Bouton -->
           <div class="flex justify-center">
-            <button type="submit" id="sendBtn"
+            <button type="submit" id="sendBtn" aria-label="Envoyer le message"
               class="m-4 fly-yoyo relative overflow-hidden flex items-center
               bg-gradient-to-r from-[#3857cb] to-[#2c469f] text-white
               font-sans text-[20px] px-4 py-2 pl-[0.9em] rounded-[16px]
@@ -99,7 +114,7 @@ include 'header.php';
                   </div>
                 </div>
                 <span id="btnText" class="block ml-[0.3em] transition-all duration-300 ease-in-out group-hover:translate-x-[5em]">
-                  Send
+                  Envoyer
                 </span>
               </div>
               <svg id="btnLoader" class="hidden absolute inset-0 mx-auto my-auto w-6 h-6 text-white animate-spin"
@@ -110,7 +125,7 @@ include 'header.php';
             </button>
           </div>
 
-          <!-- Message -->
+          <!-- Message de retour -->
           <div id="responseMessage" aria-live="polite" class="text-center font-medium mb-6"></div>
         </form>
       </div>
@@ -142,10 +157,14 @@ include 'header.php';
         .then(res => res.json())
         .then(data => {
           msgBox.innerText = data.message;
-          msgBox.className = data.status === "success" ?
-            "mt-4 text-green-700 bg-green-100 border border-green-300 p-2 rounded" :
-            "mt-4 text-red-700 bg-red-100 border border-red-300 p-2 rounded";
-          if (data.status === "success") form.reset();
+          msgBox.className = data.status === "success"
+            ? "mt-4 text-green-700 bg-green-100 border border-green-300 p-2 rounded"
+            : "mt-4 text-red-700 bg-red-100 border border-red-300 p-2 rounded";
+
+          if (data.status === "success") {
+            form.reset();
+            grecaptcha.reset();
+          }
         })
         .catch(() => {
           msgBox.innerText = "Erreur lors de l'envoi.";

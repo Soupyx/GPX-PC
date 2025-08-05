@@ -1,9 +1,30 @@
 <?php
-$pageTitle = "Réparation & Entretien – GPX PC | Assemblage & Réparation PC en France";
-$pageDescription = "Faites réparer et entretenir votre PC avec GPX PC. Nettoyage, changement de composants, optimisation et maintenance, à Marseille et livraison en France.";
+$pageTitle = "Réparation & Entretien PC – GPX PC | Maintenance et Assemblage en France";
+$pageDescription = "Service de réparation et entretien PC avec GPX PC : nettoyage, changement de composants, optimisation et maintenance. Intervention à Marseille et livraison partout en France.";
 
 include 'header.php';
 ?>
+
+<!-- JSON-LD LocalBusiness pour SEO -->
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "GPX PC",
+    "description": "Service de réparation et entretien PC : nettoyage, remplacement de composants et optimisation.",
+    "url": "https://ton-site.fr/reparation.php",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Marseille",
+      "addressCountry": "FR"
+    },
+    "areaServed": {
+      "@type": "Place",
+      "name": "France"
+    },
+    "serviceType": "Réparation et maintenance PC"
+  }
+</script>
 
 <style>
   @keyframes fly {
@@ -27,17 +48,18 @@ include 'header.php';
 
       <!-- En-tête -->
       <div class="px-8 py-12 text-center">
-        <h2 class="text-4xl sm:text-5xl font-extrabold text-[#3857cb] dark:text-blue-400 mb-4 drop-shadow-lg">
-          Réparation & Entretien
-        </h2>
-        <p class="text-lg sm:text-xl text-gray-500 dark:text-gray-400">
-          Remplis ce formulaire pour demander une réparation ou un entretien de ton PC.
+        <h1 class="text-4xl sm:text-5xl font-extrabold text-[#3857cb] dark:text-blue-400 mb-4 drop-shadow-lg">
+          Réparation & Entretien PC
+        </h1>
+        <p class="text-lg sm:text-xl text-gray-500 dark:text-gray-400 max-w-xl mx-auto">
+          Demandez la réparation ou l’entretien de votre PC : <strong>nettoyage, optimisation</strong> et <strong>remplacement de composants</strong>.
+          Livraison et services disponibles à <strong>Marseille et dans toute la France</strong>.
         </p>
       </div>
 
       <!-- Formulaire -->
       <div class="px-6 pb-2">
-        <form id="reparationForm" action="send.php" method="POST" novalidate class="space-y-6">
+        <form id="reparationForm" action="send.php" method="POST" novalidate class="space-y-6" aria-label="Formulaire de demande de réparation PC">
 
           <!-- Nom -->
           <div>
@@ -78,7 +100,7 @@ include 'header.php';
               <option value="PC Portable">PC Portable</option>
             </select>
             <p id="portableWarning" class="hidden mt-2 text-sm text-yellow-600 dark:text-yellow-400">
-              ⚠️ Attention : Pour les PC portables, certaines interventions matérielles complexes (comme un démontage complet ou un remplacement de composants internes) peuvent être difficiles ou impossibles à réaliser. Nous privilégions les services logiciels, le nettoyage léger et les réparations simples afin de garantir la sécurité de votre appareil.
+              ⚠️ Pour les PC portables, seules les interventions logicielles, nettoyages légers et réparations simples sont proposées.
             </p>
           </div>
 
@@ -132,15 +154,16 @@ include 'header.php';
           </div>
 
           <!-- CSRF + formType + reCAPTCHA -->
-          <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>" />
+          <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']; ?>" />
           <input type="hidden" name="formType" value="reparation">
-          <div class="g-recaptcha" data-sitekey="<?php echo RECAPTCHA_SITE_KEY; ?>" ></div>
+          <div class="g-recaptcha" data-sitekey="<?= RECAPTCHA_SITE_KEY; ?>"></div>
 
           <!-- Bouton -->
           <div class="flex justify-center">
             <button
               type="submit"
               id="sendBtn"
+              aria-label="Envoyer la demande de réparation"
               class="m-4 fly-yoyo relative overflow-hidden flex items-center bg-gradient-to-r from-[#3857cb] to-[#2c469f] text-white font-sans text-[20px] px-4 py-2 pl-[0.9em] rounded-[16px] transition-all duration-200 active:scale-[0.95] cursor-pointer group">
               <div id="btnContent" class="flex items-center transition-opacity duration-200">
                 <div class="relative w-6 h-6 mr-[0.3em]">
@@ -154,7 +177,7 @@ include 'header.php';
                   </div>
                 </div>
                 <span id="btnText" class="block ml-[0.3em] transition-all duration-300 ease-in-out group-hover:translate-x-[5em]">
-                  Send
+                  Envoyer
                 </span>
               </div>
               <svg id="btnLoader" class="hidden absolute inset-0 mx-auto my-auto w-6 h-6 text-white animate-spin"
@@ -176,7 +199,7 @@ include 'header.php';
 <?php include 'footer.php'; ?>
 
 <script>
-  // Avertissement dynamique pour PC portable
+  // Avertissement PC portable
   document.getElementById("pc_type").addEventListener("change", function() {
     document.getElementById("portableWarning").classList.toggle(
       "hidden",
@@ -184,45 +207,41 @@ include 'header.php';
     );
   });
 
-document.getElementById("reparationForm").addEventListener("submit", function(e) {
-  e.preventDefault(); // Empêche l'envoi classique
+  // Gestion Ajax du formulaire
+  document.getElementById("reparationForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    const form = e.target;
+    const formData = new FormData(form);
 
-  const form = e.target;
-  const formData = new FormData(form);
+    document.getElementById("btnContent").style.opacity = "0.5";
+    document.getElementById("btnLoader").classList.remove("hidden");
 
-  // Afficher loader
-  document.getElementById("btnContent").style.opacity = "0.5";
-  document.getElementById("btnLoader").classList.remove("hidden");
+    fetch(form.action, {
+        method: "POST",
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById("btnContent").style.opacity = "1";
+        document.getElementById("btnLoader").classList.add("hidden");
 
-  fetch(form.action, {
-    method: "POST",
-    body: formData
-  })
-  .then(response => response.json())
-  .then(data => {
-    // Réinitialiser le bouton
-    document.getElementById("btnContent").style.opacity = "1";
-    document.getElementById("btnLoader").classList.add("hidden");
-
-    const msg = document.getElementById("responseMessage");
-    if (data.status === "success") {
-      msg.textContent = "✅ Message envoyé avec succès !";
-      msg.className = "mt-6 text-center font-medium text-green-600 dark:text-green-400";
-      form.reset();
-      grecaptcha.reset(); // reset reCAPTCHA
-    } else {
-      msg.textContent = "❌ " + data.message;
-      msg.className = "mt-6 text-center font-medium text-red-600 dark:text-red-400";
-    }
-  })
-  .catch(() => {
-    document.getElementById("btnContent").style.opacity = "1";
-    document.getElementById("btnLoader").classList.add("hidden");
-
-    const msg = document.getElementById("responseMessage");
-    msg.textContent = "❌ Erreur réseau. Veuillez réessayer.";
-    msg.className = "mt-6 text-center font-medium text-red-600 dark:text-red-400";
+        const msg = document.getElementById("responseMessage");
+        if (data.status === "success") {
+          msg.textContent = "✅ Message envoyé avec succès !";
+          msg.className = "mt-6 text-center font-medium text-green-600 dark:text-green-400";
+          form.reset();
+          grecaptcha.reset();
+        } else {
+          msg.textContent = "❌ " + data.message;
+          msg.className = "mt-6 text-center font-medium text-red-600 dark:text-red-400";
+        }
+      })
+      .catch(() => {
+        document.getElementById("btnContent").style.opacity = "1";
+        document.getElementById("btnLoader").classList.add("hidden");
+        const msg = document.getElementById("responseMessage");
+        msg.textContent = "❌ Erreur réseau. Veuillez réessayer.";
+        msg.className = "mt-6 text-center font-medium text-red-600 dark:text-red-400";
+      });
   });
-});
-
 </script>

@@ -1,173 +1,145 @@
 <?php
 // pcs.php
 $pcs = [
-    'Bureautique' => [
-        [
-            'name' => 'Bureautique Basic',
-            'price' => 399,
-            'components' => [
-                'Processeur : Intel i3-12100',
-                'Carte graphique : Intel UHD 730 intégrée',
-                'RAM : 8 Go DDR4 2666MHz',
-                'Refroidissement : Ventirad d\'origine',
-                'Carte mère : ASUS PRIME H610M',
-                'Alimentation : 450W 80+ White',
-                'Stockage : 256 Go SSD SATA Kingston',
-                'Boitier : Aerocool Bolt Mini'
-            ]
-        ],
-        [
-            'name' => 'Bureautique Plus',
-            'price' => 599,
-            'components' => [
-                'Processeur : AMD Ryzen 5 5600G',
-                'Carte graphique : Radeon Vega intégrée',
-                'RAM : 16 Go DDR4 3200MHz',
-                'Refroidissement : Ventirad silencieux',
-                'Carte mère : ASRock B550M Pro4',
-                'Alimentation : 500W 80+ Bronze',
-                'Stockage : 512 Go SSD NVMe Crucial',
-                'Boitier : Be Quiet! Pure Base 500'
-            ]
-        ],
-        [
-            'name' => 'Bureautique Ultimate',
-            'price' => 899,
-            'components' => [
-                'Processeur : Intel i5-13500',
-                'Carte graphique : Intel UHD 770 intégrée',
-                'RAM : 32 Go DDR4 3200MHz',
-                'Refroidissement : Ventirad Be Quiet!',
-                'Carte mère : Gigabyte B760M DS3H',
-                'Alimentation : 550W 80+ Bronze',
-                'Stockage : 1 To SSD NVMe Samsung',
-                'Boitier : Fractal Design Meshify C'
-            ]
-        ],
-    ],
-
     'Gamer' => [
         [
-            'name' => 'Gamer Essentiel',
+            'name' => 'Gamer Basic',
             'price' => 799,
             'components' => [
                 'Processeur : i3-12100F',
-                'Carte graphique : NVIDIA GTX 1660 Super',
-                'RAM : Corsair VENGEANCE (2 x 8 Go) DDR4 3600MHz C18',
+                'Carte graphique : AMD Radeon RX 7600',
+                'RAM : Corsair VENGEANCE (2 × 8 Go) DDR4 3600MHz C18',
                 'Refroidissement : Ventirad d\'origine',
-                'Carte mère : GIGABTE B760M Gaming X DDR4',
-                'Alimentation : 550W 80+ Bronze',
-                'Stockage : 500 Go SSD NVMe Samsung',
-                'Boitier : NZXT H510 Noir'
-            ]
+                'Carte mère : GIGABYTE B760M Gaming X, DDR4',
+                'Alimentation : MSI MAG A650BN, 650W, 80Plus Bronze',
+                'Boîtier : MSI MAG FORGE M100R'
+            ],
+            'case_link' => 'https://fr.msi.com/PC-Case/MAG-FORGE-M100R',
         ],
         [
-            'name' => 'Gamer Plus',
+            'name' => 'Gamer Pro',
             'price' => 1299,
             'components' => [
-                'Processeur : Intel i5-13600KF',
-                'Carte graphique : NVIDIA RTX 3060 Ti',
-                'RAM : 32 Go DDR5 5600MHz',
-                'Refroidissement : Watercooling 240mm',
-                'Carte mère : ASUS TUF Z690',
-                'Alimentation : 650W 80+ Gold',
-                'Stockage : 1 To SSD NVMe WD Black',
-                'Boitier : Corsair 4000D Airflow'
-            ]
+                'Processeur : AMD Ryzen 5 7600X',
+                'Carte graphique : AMD Radeon RX 7800 XT',
+                'RAM : Kingston Fury Beast Black ARGB (2 × 16 Go) DDR5-6000 CL30',
+                'Refroidissement : Freezer 34 eSports DUO',
+                'Carte mère : GIGABYTE B650 Eagle AX, DDR5',
+                'Alimentation : Thermaltake Toughpower GT 850W, 80Plus Gold',
+                'Stockage : Samsung 990 EVO Plus NVMe M.2 PCIe 4.0, 1To',
+                'Boîtier : Corsair FRAME 4000D RS ARGB',
+            ],
+            'case_link' => 'https://www.corsair.com/fr/fr/p/pc-cases/cc-9011296-ww/frame-4000d-rs-argb-modular-mid-tower-pc-case-cc-9011296-ww',
         ],
         [
             'name' => 'Gamer Ultimate',
             'price' => 2499,
             'components' => [
-                'Processeur : Intel i9-14900K',
-                'Carte graphique : NVIDIA RTX 4080',
-                'RAM : 64 Go DDR5 6000MHz',
-                'Refroidissement : Watercooling 360mm',
-                'Carte mère : ASUS ROG Maximus Z790',
-                'Alimentation : 850W 80+ Platinum',
-                'Stockage : 2 To SSD NVMe + 4 To HDD',
-                'Boitier : Lian Li PC-O11 Dynamic'
-            ]
+                'Processeur : AMD Ryzen 7 9700X',
+                'Carte graphique : MSI NVDIA GeForce RTX 5080',
+                'RAM : 2 × 16 Go DDR5 6000 CL30',
+                'Refroidissement : ARCTIC Liquid Freezer III Pro 360 A-RGB',
+                'Carte mère : Asus Tuf Gaming B650-PLUS WIFI',
+                'Alimentation : Corsair RM1000e (2025), 1000W, 80Plus Gold',
+                'Stockage : Samsung 990 EVO Plus NVMe M.2 PCIe 4.0, 2To',
+                'Boîtier : Lian-Li O11',
+                'Ventilateurs supplémentaires : Artic P12 (5 pièces)'
+            ],
+            'case_link' => 'https://lian-li.com/fr/product/pc-o11-dynamic/',
         ],
     ],
 
-    'Streamer' => [
+    'Streamer Basic' => [
         [
             'name' => 'Streamer Basic',
             'price' => 999,
             'components' => [
-                'Processeur : AMD Ryzen 7 5700G',
-                'Carte graphique : NVIDIA RTX 3050',
-                'RAM : 16 Go DDR4 3200MHz',
-                'Refroidissement : Ventirad silencieux',
-                'Carte mère : Gigabyte B550M DS3H',
-                'Alimentation : 600W 80+ Bronze',
-                'Stockage : 1 To SSD NVMe Crucial',
-                'Boitier : Phanteks Eclipse P360A'
-            ]
+                'Processeur : AMD Ryzen 7 9700X',
+                'Carte graphique : NVIDIA GeForce RTX 5070',
+                'RAM : 2 × 16 Go DDR5 6000 CL30',
+                'Refroidissement : Watercooling 240mm A-RGB',
+                'Carte mère : GIGABYTE X670 AORUS Elite AX',
+                'Alimentation : CORSAIR RM850x, 850W, 80Plus Gold',
+                'Stockage : 1To NVMe M.2 PCIe 4.0',
+                'Boîtier : Fractal Design Meshify C'
+            ],
+            'case_link' => 'https://www.fractal-design.com/products/cases/meshify/meshify-c/black-tg-dark-tint/',
         ],
         [
-            'name' => 'Streamer Plus',
+            'name' => 'Streamer Pro',
             'price' => 1599,
             'components' => [
-                'Processeur : Intel i7-13700K',
-                'Carte graphique : NVIDIA RTX 3070 Ti',
-                'RAM : 32 Go DDR5 5600MHz',
-                'Refroidissement : Watercooling 240mm RGB',
-                'Carte mère : ASUS PRIME Z690-P',
-                'Alimentation : 750W 80+ Gold',
-                'Stockage : 1 To SSD NVMe + 2 To HDD',
-                'Boitier : Cooler Master MasterBox TD500'
-            ]
-        ],
-        [
-            'name' => 'Streamer Ultimate',
-            'price' => 2899,
-            'components' => [
-                'Processeur : Intel i9-14900K',
-                'Carte graphique : NVIDIA RTX 4090',
-                'RAM : 64 Go DDR5 6000MHz',
-                'Refroidissement : Watercooling 360mm RGB',
-                'Carte mère : MSI MEG Z790 ACE',
-                'Alimentation : 1000W 80+ Platinum',
-                'Stockage : 2 To SSD NVMe + 4 To HDD',
-                'Boitier : Corsair iCUE 5000X RGB'
-            ]
+                'Processeur : AMD Ryzen 9 9950X',
+                'Carte graphique : NVIDIA GeForce RTX 5080',
+                'RAM : 2 × 32 Go DDR5 6000 CL30',
+                'Refroidissement : Watercooling 360mm A-RGB',
+                'Carte mère : ASUS ROG Strix X870E-E Gaming WiFi',
+                'Alimentation : CORSAIR RM1000x, 1000W, 80Plus Gold',
+                'Stockage : 2To NVMe M.2 PCIe 4.0',
+                'Boîtier : CORSAIR Frame 4000D RS ARGB'
+            ],
+            'case_link' => 'https://www.corsair.com/fr/fr/p/pc-cases/cc-9011296-ww/frame-4000d-rs-argb-modular-mid-tower-pc-case-cc-9011296-ww',
         ],
     ],
 ];
 
-// Définition du titre et description pour le header
+// 🔹 Meta dynamiques pour SEO
 $pageTitle = "PC Gamer, Streaming et Bureautique Préconfigurés | GPX PC";
-$pageDescription = "Découvrez nos PC gaming, streaming et bureautiques prêts à l’emploi, avec livraison à Marseille et dans toute la France.";
+$pageDescription = "Découvrez nos PC gaming, streaming et bureautiques prêts à l’emploi, configurés pour vos besoins, avec livraison à Marseille et dans toute la France.";
 
 include 'header.php';
 ?>
 
 <main class="max-w-7xl mx-auto px-4 py-8">
-    <h1 class="p-6 text-center text-4xl sm:text-5xl font-extrabold mb-4 drop-shadow-lg">Nos configurations PC</h1>
+    <h1 class="p-6 text-center text-4xl sm:text-5xl font-extrabold mb-4 drop-shadow-lg">
+        Nos configurations PC prêtes à l'emploi
+    </h1>
+    <p class="text-center max-w-2xl mx-auto text-gray-600 dark:text-gray-300 mb-10">
+        Découvrez nos PC <strong>gaming</strong>, <strong>streaming</strong> et <strong>bureautiques</strong> optimisés.
+        Chaque configuration est prête à l'emploi, testée et livrée partout en France.
+    </p>
 
     <?php foreach ($pcs as $category => $list): ?>
-        <h2 class="text-2xl font-semibold mb-4"><?= $category ?></h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+        <h2 class="text-3xl font-bold mb-4 text-[#3857cb] dark:text-blue-400"><?= htmlspecialchars($category) ?></h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
             <?php foreach ($list as $pc): ?>
-                <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-4 flex flex-col justify-between">
-                    <div>
-                        <h3 class="text-xl font-semibold mb-2"><?= htmlspecialchars($pc['name']) ?></h3>
-                        <p class="text-lg font-bold text-purple-600 mb-3"><?= htmlspecialchars($pc['price']) ?> €</p>
-                        <ul class="list-disc list-inside text-sm text-gray-700 dark:text-gray-300 mb-4">
+                <article class="flex flex-col bg-white dark:bg-gray-800 shadow-lg rounded-xl hover:shadow-xl transition duration-300 h-full">
+                    <div class="flex-1 flex flex-col p-6">
+                        <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2 text-center">
+                            <?= htmlspecialchars($pc['name']) ?>
+                        </h3>
+                        <p class="text-xl font-extrabold text-purple-600 dark:text-purple-400 mb-4 text-center">
+                            <?= htmlspecialchars($pc['price']) ?> €
+                        </p>
+                        <ul class="list-disc list-inside pl-4 text-sm text-gray-700 dark:text-gray-300 flex-1 space-y-1 leading-snug">
                             <?php foreach ($pc['components'] as $component): ?>
-                                <li><?= htmlspecialchars($component) ?></li>
+                                <?php
+                                if (strpos($component, 'Boîtier') !== false && !empty($pc['case_link'])):
+                                    $partBoitier = htmlspecialchars($component);
+                                    $link = htmlspecialchars($pc['case_link']);
+                                ?>
+                                    <li class="break-words">
+                                        <?= $partBoitier ?>
+                                        -
+                                        <a href="<?= $link ?>" target="_blank" rel="noopener noreferrer" class="text-blue-600 underline hover:text-blue-800">
+                                            Voir la photo officielle
+                                        </a>
+                                    </li>
+                                <?php else: ?>
+                                    <li class="break-words"><?= htmlspecialchars($component) ?></li>
+                                <?php endif; ?>
                             <?php endforeach; ?>
                         </ul>
                     </div>
-                    <form action="contact.php" method="get">
+
+                    <form action="contact.php" method="get" class="p-6 pt-0">
                         <input type="hidden" name="pc" value="<?= htmlspecialchars($pc['name']) ?>">
-                        <button type="submit" class="mt-3 w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded">
-                            Choisir
+                        <button type="submit"
+                            class="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-4 rounded-lg transition">
+                            Choisir ce PC
                         </button>
                     </form>
-                </div>
+                </article>
             <?php endforeach; ?>
         </div>
     <?php endforeach; ?>
