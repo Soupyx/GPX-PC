@@ -83,20 +83,53 @@ $pcs = [
     ],
 ];
 
-// 🔹 Meta dynamiques pour SEO
-$pageTitle = "PC Gamer, Streaming et Bureautique Préconfigurés | GPX PC";
-$pageDescription = "Découvrez nos PC gaming, streaming et bureautiques prêts à l’emploi, configurés pour vos besoins, avec livraison à Marseille et dans toute la France.";
-
+$pageTitle = "Configurations PC Gamer & Streaming | GPX PC Marseille | Achat & Livraison";
+$pageDescription = "Achetez nos configurations PC gamer, streaming et bureautique optimisées. Des ordinateurs prêts à l'emploi, testés et livrés depuis Marseille partout en France.";
 include 'header.php';
 ?>
 
-<main class="max-w-7xl mx-auto px-4 py-8">
+<script type="application/ld+json">
+    [
+        <?php
+        $productsJson = [];
+        $siteUrl = "https://gpxpc1.whf.bz/";
+
+        foreach ($pcs as $category) {
+            foreach ($category as $pc) {
+                $productsJson[] = json_encode([
+                    "@context" => "https://schema.org",
+                    "@type" => "Product",
+                    "name" => htmlspecialchars($pc['name']),
+                    "description" => "Configuration PC " . htmlspecialchars($pc['name']) . " assemblée par GPX PC, optimisée pour la performance.",
+                    // On enlève le / au début ici
+                    "image" => $siteUrl . "logo/Logo.png",
+                    "sku" => "GPX-" . preg_replace('/[^A-Z0-9]/', '-', strtoupper($pc['name'])),
+                    "brand" => [
+                        "@type" => "Brand",
+                        "name" => "GPX PC"
+                    ],
+                    "offers" => [
+                        "@type" => "Offer",
+                        // Et on enlève le / au début ici aussi
+                        "url" => $siteUrl . "contact.php?pc=" . urlencode($pc['name']),
+                        "priceCurrency" => "EUR",
+                        "price" => $pc['price'],
+                        "availability" => "https://schema.org/InStock",
+                        "itemCondition" => "https://schema.org/NewCondition"
+                    ]
+                ]);
+            }
+        }
+        echo implode(",", $productsJson);
+        ?>
+    ]
+</script>
     <h1 class="p-6 text-center text-4xl sm:text-5xl font-extrabold mb-4 drop-shadow-lg">
-        Nos configurations PC prêtes à l'emploi
+        Nos Configurations PC Gamer et Streaming
     </h1>
     <p class="text-center max-w-2xl mx-auto text-gray-600 dark:text-gray-300 mb-10">
-        Découvrez nos PC <strong>gaming</strong>, <strong>streaming</strong> et <strong>bureautiques</strong> optimisés.
-        Chaque configuration est prête à l'emploi, testée et livrée partout en France.
+        Découvrez nos PC conçus pour le <strong>gaming</strong>, le <strong>streaming</strong> et la <strong>bureautique</strong>.
+        Chaque configuration est optimisée, prête à l'emploi et peut être livrée partout en France depuis notre atelier à <strong>Marseille</strong>.
     </p>
 
     <?php foreach ($pcs as $category => $list): ?>

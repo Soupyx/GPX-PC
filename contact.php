@@ -6,43 +6,45 @@ $prefilledMessage = $selectedPC
   ? "Bonjour, je souhaite acheter le PC \"$selectedPC\" est-il toujours disponible ?"
   : '';
 
-$pageTitle = "Contact – GPX PC | Assemblage & Réparation PC en France";
+$pageTitle = "Contacter GPX PC - Monteur PC à Marseille";
 $pageDescription = "Contactez GPX PC pour vos questions sur le montage, la réparation ou l’entretien d’ordinateurs à Marseille. Assemblage et livraison partout en France.";
 
 include 'header.php';
 ?>
 
-<!-- JSON-LD pour Google -->
 <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "LocalBusiness",
-  "name": "GPX PC",
-  "description": "Contactez GPX PC pour vos demandes de montage et réparation de PC, à Marseille et livraison partout en France.",
-  "url": "https://ton-site.fr/contact.php",
-  "address": {
-    "@type": "PostalAddress",
-    "addressLocality": "Marseille",
-    "addressCountry": "FR"
-  },
-  "areaServed": {
-    "@type": "Place",
-    "name": "France"
-  },
-  "contactPoint": {
-    "@type": "ContactPoint",
-    "contactType": "customer support",
-    "availableLanguage": "French"
+  {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    "mainEntity": {
+      "@type": "LocalBusiness",
+      "name": "GPX PC",
+      "image": "https://gpxpc1.whf.bz/logo/Logo.png",
+      "telephone": "+33652152999",
+      "url": "https://gpxpc1.whf.bz/contact.php",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Marseille",
+        "addressCountry": "FR"
+      }
+    }
   }
-}
 </script>
 
 <style>
   @keyframes fly {
-    from { transform: translateY(0.1em); }
-    to { transform: translateY(-0.1em); }
+    from {
+      transform: translateY(0.1em);
+    }
+
+    to {
+      transform: translateY(-0.1em);
+    }
   }
-  .fly-yoyo { animation: fly 0.6s ease-in-out infinite alternate; }
+
+  .fly-yoyo {
+    animation: fly 0.6s ease-in-out infinite alternate;
+  }
 </style>
 
 <main class="flex-grow bg-gray-50 dark:bg-gray-900 transition-colors duration-500">
@@ -157,9 +159,9 @@ include 'header.php';
         .then(res => res.json())
         .then(data => {
           msgBox.innerText = data.message;
-          msgBox.className = data.status === "success"
-            ? "mt-4 text-green-700 bg-green-100 border border-green-300 p-2 rounded"
-            : "mt-4 text-red-700 bg-red-100 border border-red-300 p-2 rounded";
+          msgBox.className = data.status === "success" ?
+            "mt-4 text-green-700 bg-green-100 border border-green-300 p-2 rounded" :
+            "mt-4 text-red-700 bg-red-100 border border-red-300 p-2 rounded";
 
           if (data.status === "success") {
             form.reset();

@@ -1,28 +1,60 @@
 <?php
 require_once __DIR__ . '/config.php';
 
-// 🔹 Variables pour le header dynamique
-$pageTitle = "Demande de devis gratuit | GPX PC";
-$pageDescription = "Obtenez une estimation personnalisée pour votre PC sur-mesure : assemblage, optimisation et livraison dans toute la France. Remplissez notre formulaire de devis gratuit dès maintenant !";
-
+$pageTitle = "Devis Gratuit PC sur Mesure | GPX PC Marseille";
+$pageDescription = "Obtenez votre devis gratuit pour un PC sur-mesure. GPX PC, votre monteur de PC à Marseille, conçoit la configuration parfaite pour vos besoins (gamer, pro) et livre en France.";
 include 'header.php';
 ?>
 
-<!-- Données structurées SEO LocalBusiness -->
 <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     "name": "GPX PC",
-    "image": "https://tonsite.com/logo.png",
-    "description": "Assemblage, réparation et optimisation de PC à Marseille avec devis gratuit et livraison en France.",
+    "image": "https://gpxpc1.whf.bz/logo/Logo.png",
+    "telephone": "+33652152999",
+    "url": "https://gpxpc1.whf.bz/devis.php",
     "address": {
       "@type": "PostalAddress",
       "addressLocality": "Marseille",
       "addressCountry": "FR"
     },
-    "url": "https://tonsite.com",
-    "telephone": "+33 6 00 00 00 00"
+    "description": "Demandez un devis gratuit pour le montage de votre PC sur mesure et des services informatiques à Marseille.",
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Services pour PC sur mesure",
+      "itemListElement": [{
+          "@type": "Service",
+          "name": "Assemblage des composants PC",
+          "description": "Service professionnel d'assemblage de tous vos composants PC pour une configuration stable et performante.",
+          "offers": {
+            "@type": "Offer",
+            "price": "50",
+            "priceCurrency": "EUR"
+          }
+        },
+        {
+          "@type": "Service",
+          "name": "Installation du système d’exploitation",
+          "description": "Installation et configuration de Windows ou Linux sur votre nouvelle machine.",
+          "offers": {
+            "@type": "Offer",
+            "price": "20",
+            "priceCurrency": "EUR"
+          }
+        },
+        {
+          "@type": "Service",
+          "name": "Optimisation pour le gaming",
+          "description": "Configuration avancée du système et des pilotes pour des performances de jeu maximales.",
+          "offers": {
+            "@type": "Offer",
+            "price": "15",
+            "priceCurrency": "EUR"
+          }
+        }
+      ]
+    }
   }
 </script>
 
@@ -34,11 +66,11 @@ include 'header.php';
       <!-- En-tête -->
       <div class="px-8 py-12 text-center">
         <h1 class="text-4xl sm:text-5xl font-extrabold text-[#3857cb] dark:text-blue-400 mb-4 drop-shadow-lg">
-          Demande de devis gratuit
+          Devis pour votre PC sur Mesure
         </h1>
         <p class="text-lg sm:text-xl pt-4 text-gray-500 dark:text-gray-400">
-          Remplissez ce formulaire pour recevoir rapidement une estimation personnalisée pour votre PC sur-mesure,
-          incluant assemblage, optimisation et livraison partout en France.
+          Remplissez ce formulaire pour recevoir une estimation gratuite et personnalisée pour le <strong>montage de votre PC sur-mesure</strong>.
+          Service d'assemblage, optimisation et livraison partout en France depuis <strong>Marseille</strong>.
         </p>
       </div>
 

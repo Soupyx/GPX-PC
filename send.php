@@ -165,9 +165,9 @@ if ($formType === 'contact') {
         <p><strong>Message :</strong><br>" . nl2br(htmlspecialchars($message)) . "</p>
     ";
 
-// -----------------------------------------------------------------------------
-// BRANCHE : DEVIS
-// -----------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------
+    // BRANCHE : DEVIS
+    // -----------------------------------------------------------------------------
 } elseif ($formType === 'devis') {
     $phone   = trim($_POST['phone']   ?? '');
     $budget  = trim($_POST['budget']  ?? '');
@@ -208,9 +208,9 @@ if ($formType === 'contact') {
         <p><strong>Détails :</strong><br>" . nl2br(htmlspecialchars($details)) . "</p>
     ";
 
-// -----------------------------------------------------------------------------
-// BRANCHE : RÉPARATION
-// -----------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------
+    // BRANCHE : RÉPARATION
+    // -----------------------------------------------------------------------------
 } elseif ($formType === 'reparation') {
     $pcType  = trim($_POST['pc_type'] ?? '');
     $urgency = trim($_POST['urgency'] ?? '');
@@ -250,12 +250,14 @@ if ($formType === 'contact') {
 // ENVOI VIA BREVO
 // -----------------------------------------------------------------------------
 $payload = [
-    'sender'      => ['name' => 'GPX PC', 'email' => 'no-reply@tonsite.com'],
+    'sender'      => ['name' => 'GPX PC', 'email' => $_ENV['CONTACT_EMAIL'] ?? getenv('CONTACT_EMAIL')],
     'replyTo'     => ['email' => $email, 'name' => $name],
-    'to'          => [['email' => 'baptiste.soupy@gmail.com']],
+    'to'          => [['email' => $_ENV['CONTACT_EMAIL'] ?? getenv('CONTACT_EMAIL')]],
     'subject'     => $subject,
     'htmlContent' => $htmlContent
 ];
+
+
 
 $apiKey = $_ENV['BREVO_API_KEY'] ?? getenv('BREVO_API_KEY') ?? '';
 if ($apiKey === '') jsonError('Erreur de configuration serveur.', 500);

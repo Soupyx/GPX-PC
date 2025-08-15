@@ -1,25 +1,24 @@
 <?php
-$pageTitle = "GPX PC | Montage et Réparation PC à Marseille & Livraison Partout en France";
-$pageDescription = "GPX PC assemble, répare et optimise vos PC à Marseille avec livraison partout en France. Demandez votre devis gratuit pour un PC sur-mesure !";
+$pageTitle = "GPX PC | Montage PC sur Mesure à Marseille | Livraison France";
+$pageDescription = "Expert en montage de PC sur mesure à Marseille. GPX PC assemble, répare et optimise votre ordinateur gamer ou professionnel. Livraison dans toute la France. Devis gratuit.";
 
 include 'header.php';
 ?>
 
-<!-- Données structurées SEO LocalBusiness -->
 <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     "name": "GPX PC",
-    "image": "https://tonsite.com/logo.png",
-    "description": "Assemblage et réparation de PC à Marseille avec livraison dans toute la France. PC sur-mesure pour gamers et professionnels.",
+    "image": "https://gpxpc1.whf.bz/logo/Logo.png",
+    "description": "Expert en montage et réparation de PC sur mesure à Marseille. Services pour PC gamer et professionnels avec livraison possible dans toute la France.",
     "address": {
       "@type": "PostalAddress",
       "addressLocality": "Marseille",
       "addressCountry": "FR"
     },
-    "url": "https://tonsite.com",
-    "telephone": "+33 6 00 00 00 00"
+    "url": "https://gpxpc1.whf.bz/",
+    "telephone": "+33652152999"
   }
 </script>
 
@@ -39,15 +38,17 @@ include 'header.php';
   }
 </style>
 
+
+
 <main class="flex-grow bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100">
 
   <!-- Hero -->
   <section class="bg-gradient-to-r from-[#3857cb] to-[#2c469f] text-white text-center py-20 px-6">
     <h1 class="text-4xl sm:text-5xl font-extrabold mb-4 drop-shadow-lg">
-      Ton expert PC sur mesure
+      Votre Expert en Montage PC sur Mesure à Marseille
     </h1>
     <p class="text-lg sm:text-xl mb-6">
-      Assemblage, réparation et upgrades pour tous tes besoins informatiques.
+      Assemblage, réparation et optimisation de PC gamer et professionnels, avec livraison partout en France.
     </p>
   </section>
 

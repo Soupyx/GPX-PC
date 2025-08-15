@@ -1,4 +1,7 @@
 <?php
+require_once __DIR__ . '/vendor/autoload.php';
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
 
-define('RECAPTCHA_SITE_KEY',   '6LdQ_pcrAAAAAPeLLcZNoVyYLe6BK9CCy1bZxVIV');
-define('RECAPTCHA_SECRET_KEY', '6LdQ_pcrAAAAADinI0HwtRY6V7u98RAecD_qMzgP');
+define('RECAPTCHA_SITE_KEY',   $_ENV['RECAPTCHA_SITE_KEY']   ?? '');
+define('RECAPTCHA_SECRET_KEY', $_ENV['RECAPTCHA_SECRET_KEY'] ?? '');

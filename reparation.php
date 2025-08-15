@@ -1,29 +1,70 @@
 <?php
-$pageTitle = "Réparation & Entretien PC – GPX PC | Maintenance et Assemblage en France";
-$pageDescription = "Service de réparation et entretien PC avec GPX PC : nettoyage, changement de composants, optimisation et maintenance. Intervention à Marseille et livraison partout en France.";
-
+$pageTitle = "Réparation et Dépannage PC à Marseille | GPX PC | Récupération de Données";
+$pageDescription = "Service de réparation, dépannage et entretien de PC à Marseille. GPX PC prend en charge le nettoyage, l'optimisation, le changement de composants et la récupération de données sur disque dur.";
 include 'header.php';
 ?>
 
-<!-- JSON-LD LocalBusiness pour SEO -->
 <script type="application/ld+json">
-  {
+{
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     "name": "GPX PC",
-    "description": "Service de réparation et entretien PC : nettoyage, remplacement de composants et optimisation.",
-    "url": "https://ton-site.fr/reparation.php",
+    "image": "https://gpxpc1.whf.bz/logo/Logo.png",
+    "telephone": "+33652152999",
+    "url": "https://gpxpc1.whf.bz/reparation.php",
     "address": {
-      "@type": "PostalAddress",
-      "addressLocality": "Marseille",
-      "addressCountry": "FR"
+        "@type": "PostalAddress",
+        "addressLocality": "Marseille",
+        "addressCountry": "FR"
     },
     "areaServed": {
-      "@type": "Place",
-      "name": "France"
+        "@type": "Place",
+        "name": "France"
     },
-    "serviceType": "Réparation et maintenance PC"
-  }
+    "description": "GPX PC offre des services experts de réparation, maintenance et optimisation d'ordinateurs à Marseille.",
+    "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Services de réparation et maintenance PC",
+        "itemListElement": [
+            {
+                "@type": "Service",
+                "name": "Nettoyage complet et dépoussiérage PC",
+                "description": "Service de nettoyage interne complet pour ordinateurs fixes et portables afin d'améliorer le refroidissement et la longévité des composants.",
+                "provider": {
+                    "@type": "LocalBusiness",
+                    "name": "GPX PC"
+                }
+            },
+            {
+                "@type": "Service",
+                "name": "Changement et mise à niveau de composants",
+                "description": "Remplacement ou ajout de composants pour améliorer votre PC : installation de SSD, augmentation de la mémoire RAM, changement de carte graphique (GPU) ou d'alimentation.",
+                "provider": {
+                    "@type": "LocalBusiness",
+                    "name": "GPX PC"
+                }
+            },
+            {
+                "@type": "Service",
+                "name": "Réinstallation et optimisation de système (Windows/Linux)",
+                "description": "Réinstallation propre de votre système d'exploitation (Windows ou Linux) avec configuration des pilotes et optimisation pour une vitesse et une stabilité maximales.",
+                "provider": {
+                    "@type": "LocalBusiness",
+                    "name": "GPX PC"
+                }
+            },
+            {
+                "@type": "Service",
+                "name": "Récupération de données",
+                "description": "Tentative de récupération de données perdues ou inaccessibles sur disques durs (HDD), SSD et autres supports de stockage.",
+                "provider": {
+                    "@type":"LocalBusiness",
+                    "name": "GPX PC"
+                }
+            }
+        ]
+    }
+}
 </script>
 
 <style>
@@ -49,11 +90,11 @@ include 'header.php';
       <!-- En-tête -->
       <div class="px-8 py-12 text-center">
         <h1 class="text-4xl sm:text-5xl font-extrabold text-[#3857cb] dark:text-blue-400 mb-4 drop-shadow-lg">
-          Réparation & Entretien PC
+          Réparation et Entretien de PC à Marseille
         </h1>
         <p class="text-lg sm:text-xl text-gray-500 dark:text-gray-400 max-w-xl mx-auto">
-          Demandez la réparation ou l’entretien de votre PC : <strong>nettoyage, optimisation</strong> et <strong>remplacement de composants</strong>.
-          Livraison et services disponibles à <strong>Marseille et dans toute la France</strong>.
+          Un problème avec votre ordinateur ? Demandez un service de <strong>réparation</strong>, <strong>nettoyage</strong>, <strong>optimisation</strong>, ou de <strong>récupération de données</strong>.
+          Intervention à <strong>Marseille</strong> et services pour toute la France.
         </p>
       </div>
 
