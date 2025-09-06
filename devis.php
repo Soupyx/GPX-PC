@@ -1,278 +1,286 @@
 <?php
 require_once __DIR__ . '/config.php';
 
-$pageTitle = "Devis Gratuit PC sur Mesure | GPX PC Marseille";
-$pageDescription = "Obtenez votre devis gratuit pour un PC sur-mesure. GPX PC, votre monteur de PC à Marseille, conçoit la configuration parfaite pour vos besoins (gamer, pro) et livre en France.";
+$selectedPC = $_GET['pc'] ?? '';
+$prefilledMessage = $selectedPC
+  ? "Bonjour, je souhaite acheter le PC \"" . htmlspecialchars($selectedPC) . "\" est-il toujours disponible ?"
+  : '';
+
+$pageTitle = "Demander un devis gratuit - GPX PC";
+$pageDescription = "Obtenez un devis gratuit pour votre PC sur-mesure et services informatiques à Marseille.";
+
+$recaptchaConsent = $_COOKIE['recaptchaConsent'] ?? null;
+
+if (empty($_SESSION['csrf_token'])) {
+  $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
 include 'header.php';
+
+// Classes réutilisables pour inputs / textarea
+$inputClass = "w-full px-4 py-2 rounded-md border border-gray-300 dark:border-gray-700
+               focus:ring-2 focus:ring-[#3857cb] dark:focus:ring-blue-400
+               bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200";
+
+function renderOptions($name, $choices, $type = 'radio')
+{
+  echo '<div class="flex flex-wrap gap-4">';
+  foreach ($choices as $choice) {
+    $id = $name . '_' . preg_replace('/[^a-z0-9]/i', '_', strtolower($choice));
+    echo '<label class="flex items-center gap-2 cursor-pointer">';
+    echo "<input type='$type' name='$name" . ($type === 'checkbox' ? '[]' : '') . "' value='" . htmlspecialchars($choice) . "' id='$id' class='form-$type h-6 w-6 text-blue-500 border-gray-300 dark:border-gray-600'>";
+    echo '<span class="text-gray-900 dark:text-gray-200">' . $choice . '</span>';
+    echo '</label>';
+  }
+  echo '</div>';
+}
 ?>
 
-<script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    "name": "GPX PC",
-    "image": "https://gpxpc1.whf.bz/logo/Logo.png",
-    "telephone": "+33652152999",
-    "url": "https://gpxpc1.whf.bz/devis.php",
-    "address": {
-      "@type": "PostalAddress",
-      "addressLocality": "Marseille",
-      "addressCountry": "FR"
-    },
-    "description": "Demandez un devis gratuit pour le montage de votre PC sur mesure et des services informatiques à Marseille.",
-    "hasOfferCatalog": {
-      "@type": "OfferCatalog",
-      "name": "Services pour PC sur mesure",
-      "itemListElement": [{
-          "@type": "Service",
-          "name": "Assemblage des composants PC",
-          "description": "Service professionnel d'assemblage de tous vos composants PC pour une configuration stable et performante.",
-          "offers": {
-            "@type": "Offer",
-            "price": "50",
-            "priceCurrency": "EUR"
-          }
-        },
-        {
-          "@type": "Service",
-          "name": "Installation du système d’exploitation",
-          "description": "Installation et configuration de Windows ou Linux sur votre nouvelle machine.",
-          "offers": {
-            "@type": "Offer",
-            "price": "20",
-            "priceCurrency": "EUR"
-          }
-        },
-        {
-          "@type": "Service",
-          "name": "Optimisation pour le gaming",
-          "description": "Configuration avancée du système et des pilotes pour des performances de jeu maximales.",
-          "offers": {
-            "@type": "Offer",
-            "price": "15",
-            "priceCurrency": "EUR"
-          }
-        }
-      ]
+<style>
+  @keyframes fly {
+    from {
+      transform: translateY(0.1em);
+    }
+
+    to {
+      transform: translateY(-0.1em);
     }
   }
-</script>
 
-<main class="flex-grow bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-200">
+  .fly-yoyo {
+    animation: fly 0.6s ease-in-out infinite alternate;
+  }
 
-  <section class="py-16 px-6 bg-gray-100 dark:bg-gray-900">
-    <div class="max-w-3xl mx-auto bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 shadow-lg rounded-lg overflow-hidden">
+  #toast {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    min-width: 250px;
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    color: white;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translateX(150%);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.5s ease, opacity 0.5s ease;
+    z-index: 9999;
+    aria-live: polite;
+  }
 
-      <!-- En-tête -->
+  #toast.show {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  #toast.success {
+    background-color: #16a34a;
+  }
+
+  #toast.error {
+    background-color: #dc2626;
+  }
+</style>
+
+<main class="flex-grow bg-gray-50 dark:bg-gray-900 transition-colors duration-500">
+  <section class="py-16 px-6">
+    <div class="max-w-3xl mx-auto bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 shadow-lg rounded-lg overflow-hidden transition-colors duration-500">
+
       <div class="px-8 py-12 text-center">
-        <h1 class="text-4xl sm:text-5xl font-extrabold text-[#3857cb] dark:text-blue-400 mb-4 drop-shadow-lg">
-          Devis pour votre PC sur Mesure
-        </h1>
-        <p class="text-lg sm:text-xl pt-4 text-gray-500 dark:text-gray-400">
-          Remplissez ce formulaire pour recevoir une estimation gratuite et personnalisée pour le <strong>montage de votre PC sur-mesure</strong>.
-          Service d'assemblage, optimisation et livraison partout en France depuis <strong>Marseille</strong>.
+        <h1 class="text-4xl sm:text-5xl font-extrabold text-[#3857cb] dark:text-blue-400 mb-4 drop-shadow-lg">Devis pour votre PC sur-mesure</h1>
+        <p class="text-lg sm:text-xl text-gray-500 dark:text-gray-400 max-w-xl mx-auto">
+          Remplissez ce formulaire pour recevoir une estimation gratuite et personnalisée pour le montage de votre PC.
         </p>
       </div>
 
-      <!-- Formulaire -->
-      <div class="px-8">
-        <form id="devisForm" action="send.php" method="POST" novalidate class="space-y-6">
+      <div class="px-6 pb-12">
+        <?php if ($recaptchaConsent === 'true'): ?>
+          <form id="devisForm" data-recaptcha="true" novalidate class="space-y-6 fly-yoyo">
 
-          <!-- Prénom & Nom -->
-          <div>
-            <label for="name" class="block text-gray-800 dark:text-gray-300 mb-1">Prénom et Nom *</label>
-            <input type="text" id="name" name="name" placeholder="Nicolas Guinet" required autocomplete="name"
-              class="w-full bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500
-                     border border-gray-300 dark:border-gray-700 rounded-md px-4 py-2
-                     focus:outline-none focus:ring-2 focus:ring-green-400 transition-colors" />
-          </div>
+            <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+            <input type="hidden" name="formType" value="devis">
+            <input type="hidden" name="recaptcha_token" id="recaptcha_token">
 
-          <!-- E-mail -->
-          <div>
-            <label for="email" class="block text-gray-800 dark:text-gray-300 mb-1">E-mail *</label>
-            <input type="email" id="email" name="email" placeholder="exemple@gmail.com" required autocomplete="email"
-              class="w-full bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500
-                     border border-gray-300 dark:border-gray-700 rounded-md px-4 py-2
-                     focus:outline-none focus:ring-2 focus:ring-green-400 transition-colors" />
-          </div>
-
-          <!-- Téléphone -->
-          <div>
-            <label for="phone" class="block text-gray-800 dark:text-gray-300 mb-1">Téléphone (optionnel)</label>
-            <input type="tel" id="phone" name="phone" placeholder="06 12 34 56 78"
-              class="w-full bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500
-                     border border-gray-300 dark:border-gray-700 rounded-md px-4 py-2
-                     focus:outline-none focus:ring-2 focus:ring-green-400 transition-colors" />
-          </div>
-
-          <!-- Budget -->
-          <div>
-            <label for="budget" class="block text-gray-800 dark:text-gray-300 mb-1">Budget du PC (hors services) *</label>
-            <div class="relative inline-block">
-              <input type="number" id="budget" name="budget" placeholder="0" min="1" required
-                class="w-32 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500
-                       border border-gray-300 dark:border-gray-700 rounded-md pl-3 pr-8 py-2
-                       focus:outline-none focus:ring-2 focus:ring-green-400 transition-colors" />
-              <span class="absolute inset-y-0 right-2 flex items-center text-gray-500 dark:text-gray-400">€</span>
+            <!-- Informations contact -->
+            <div class="p-6 bg-gray-50 dark:bg-gray-900 rounded-xl shadow-inner space-y-4">
+              <h2 class="text-2xl font-semibold text-gray-700 dark:text-gray-200 mb-2">Informations de contact</h2>
+              <input type="text" name="name" placeholder="Nom complet *" required class="<?= $inputClass ?>">
+              <input type="email" name="email" placeholder="Email *" required class="<?= $inputClass ?>">
+              <input type="tel" name="phone" placeholder="Téléphone (optionnel)" class="<?= $inputClass ?>">
             </div>
-          </div>
 
-          <!-- Détails du projet -->
-          <div>
-            <label for="details" class="block text-gray-800 dark:text-gray-300 mb-1">Détails du projet *</label>
-            <textarea id="details" name="details" rows="5" placeholder="Décrivez votre projet : type d’usage, préférences, composants souhaités…" required
-              class="w-full bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500
-                     border border-gray-300 dark:border-gray-700 rounded-md px-4 py-2
-                     focus:outline-none focus:ring-2 focus:ring-green-400 transition-colors"></textarea>
-          </div>
+            <!-- Budget -->
+            <div class="p-6 bg-gray-50 dark:bg-gray-900 rounded-xl shadow-inner space-y-4 max-w-[250px]">
+              <label for="budget" class="block text-gray-700 dark:text-gray-300 font-semibold">Budget du PC *</label>
+              <div class="relative mt-2">
+                <input type="number" id="budget" name="budget" placeholder="0" min="1" required class="<?= $inputClass ?> pr-10">
+                <span class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400">€</span>
+              </div>
+            </div>
 
-          <!-- Services souhaités -->
-          <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200">Services supplémentaires</h2>
-          <div class="space-y-1">
-            <?php
-            $services = [
-              ["Choix des composants PC", 30],
-              ["Assemblage des composants PC", 50],
-              ["Installation du système d’exploitation", 20],
-              ["Office 2024 prêt installé (Word, Powerpoint...)", 35],
-              ["Suite Adobe prêt installé, Licence 1 an (Photoshop, Illustrator…)", 150],
-              ["Optimisation pour le gaming", 15],
-              ["Overclocking & Undervolting GPU", 25],
-              ["Overclocking CPU (Si le modèle convient)", 25],
-            ];
-            foreach ($services as [$label, $price]):
-              $id = preg_replace('/[^a-z0-9]/i', '_', strtolower($label));
-              if ($label === "Installation du système d’exploitation") {
-                $id = "installation_os"; // 🔹 ID fixe
-              }
-            ?>
-              <label class="flex items-center justify-between py-1 px-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition">
-                <div class="flex items-center gap-2">
-                  <input type="checkbox" name="services[]" id="<?= $id ?>" value="<?= htmlspecialchars($label) ?>"
-                    class="form-checkbox h-5 w-5 text-green-400 bg-white dark:bg-gray-900
-                                border-gray-300 dark:border-gray-700 rounded transition-colors" />
-                  <span class="text-gray-900 dark:text-gray-200"><?= $label ?></span>
-                </div>
-                <span class="text-gray-500 dark:text-gray-400 min-w-[60px] text-right"><?= $price ?> €</span>
-              </label>
+            <!-- Préférences PC -->
+            <div class="p-6 bg-gray-50 dark:bg-gray-900 rounded-xl shadow-inner space-y-6">
+              <h2 class="text-2xl font-semibold text-gray-700 dark:text-gray-200">Préférences PC</h2>
+              <?php
+              $preferences = [
+                "resolution" => ["Full HD - 1080p", "QHD - 1440p", "UHD - 4K", "Peu importe"],
+                "rgb" => ["OUI !", "Un peu mais pas trop", "Non"],
+                "theme" => ["Noir", "Blanc", "Peu importe"],
+                "boitier" => ["Aquarium", "Standard", "Mini"],
+                "processeur" => ["AMD", "Intel", "Peu importe"],
+                "carte_graphique" => ["AMD", "NVIDIA", "Peu importe"]
+              ];
+              foreach ($preferences as $name => $choices):
+                echo "<p class='font-medium text-gray-700 dark:text-gray-300 mb-2'>" . ucwords(str_replace('_', ' ', $name)) . " *</p>";
+                renderOptions($name, $choices);
+              endforeach;
+              ?>
 
-              <?php if ($label === "Installation du système d’exploitation"): ?>
-                <div id="osSelect" class="hidden ml-8 mt-2">
-                  <label for="os_choice" class="block text-gray-800 dark:text-gray-300 mb-1">Choisir un OS :</label>
-                  <select name="os_choice" id="os_choice"
-                    class="w-full bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-200
-                           border border-gray-300 dark:border-gray-700 rounded-md px-3 py-2
-                           focus:outline-none focus:ring-2 focus:ring-green-400 transition-colors">
-                    <option value="">-- Sélectionnez --</option>
-                    <option value="Windows 10">Windows 10</option>
-                    <option value="Windows 11">Windows 11</option>
-                    <option value="Ubuntu Linux">Ubuntu Linux</option>
-                    <option value="Autre">Autre</option>
-                  </select>
-                </div>
-              <?php endif; ?>
-            <?php endforeach; ?>
-          </div>
+              <!-- Usage professionnel -->
+              <p class="font-medium text-gray-700 dark:text-gray-300 mb-2">Usage professionnel *</p>
+              <?php renderOptions('pro_usage', ["Rendu 3D", "Montage Vidéo", "Musique", "Non", "Autre"], 'checkbox'); ?>
 
-          <!-- Champs cachés -->
-          <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
-          <input type="hidden" name="formType" value="devis">
-          <div class="g-recaptcha pt-4" data-sitekey="<?= RECAPTCHA_SITE_KEY; ?>"></div>
+              <!-- Projet / détails -->
+              <div>
+                <textarea id="details" name="details" rows="6" placeholder="Décrivez votre projet…" required class="<?= $inputClass ?>"><?= htmlspecialchars($prefilledMessage) ?></textarea>
+              </div>
+            </div>
 
-          <!-- Bouton d’envoi -->
-          <div class="flex justify-center">
-            <button type="submit" id="sendBtn"
-              class="m-4 relative overflow-hidden flex items-center
-                     bg-gradient-to-r from-[#3857cb] to-[#2c469f] text-white
-                     font-sans text-[20px] px-4 py-2 pl-[0.9em] rounded-[16px]
-                     transition-all duration-200 active:scale-[0.95] cursor-pointer group">
-              <div id="btnContent" class="flex items-center transition-opacity duration-200">
-                <div class="relative w-6 h-6 mr-[0.3em]">
-                  <div class="w-full h-full animate-[fly_0.6s_ease-in-out_infinite_alternate]
-                              group-hover:animate-[fly_0.6s_ease-in-out_infinite_alternate]">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"
-                      class="transition-transform duration-300 group-hover:translate-x-[1.2em] group-hover:rotate-[45deg] group-hover:scale-[1.1]">
+            <!-- Services supplémentaires -->
+            <div class="p-6 bg-gray-50 dark:bg-gray-900 rounded-xl shadow-inner space-y-4">
+              <h2 class="text-2xl font-semibold text-gray-700 dark:text-gray-200">Services supplémentaires</h2>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <?php
+                $services = [
+                  ["Office 2024 installé", 45],
+                  ["Suite Adobe 1 an", 150],
+                  ["Optimisation gaming", 20],
+                  ["Overclock GPU", 40],
+                  ["Overclock CPU", 40],
+                  ["Undervolting CPU", 30],
+                  ["Installation Windows 11", 50],
+                  ["Dual-boot Linux/Windows", 60],
+                ];
+                foreach ($services as [$label, $price]):
+                  $id = preg_replace('/[^a-z0-9]/i', '_', strtolower($label));
+                ?>
+                  <label class="flex justify-between items-center p-3 rounded-xl border border-gray-200 dark:border-gray-700 hover:shadow-md transition cursor-pointer">
+                    <span><?= $label ?></span>
+                    <div class="flex items-center gap-2">
+                      <span class="text-gray-500 dark:text-gray-400"><?= $price ?> €</span>
+                      <input type="checkbox"
+                        name="services[]"
+                        id="<?= $id ?>"
+                        value="<?= htmlspecialchars($label . ' (' . $price . ' €)') ?>"
+                        class="form-checkbox h-6 w-6 text-green-400 border-gray-300 dark:border-gray-600">
+
+                    </div>
+                  </label>
+                <?php endforeach; ?>
+              </div>
+            </div>
+
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center">
+              Ce site est protégé par reCAPTCHA et les
+              <a href="https://policies.google.com/privacy" target="_blank" class="underline">règles de confidentialité</a> et
+              <a href="https://policies.google.com/terms" target="_blank" class="underline">conditions d'utilisation</a> de Google.
+            </p>
+
+            <div class="flex justify-center">
+              <button type="button" id="sendBtn" class="m-4 fly-yoyo relative overflow-hidden flex items-center bg-gradient-to-r from-[#3857cb] to-[#2c469f] text-white font-sans text-[20px] px-4 py-2 pl-[0.9em] rounded-[16px] transition-all duration-200 active:scale-[0.95] cursor-pointer group">
+                <div id="btnContent" class="flex items-center transition-opacity duration-200">
+                  <div class="relative w-6 h-6 mr-[0.3em] fly-yoyo">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
                       <path fill="none" d="M0 0h24v24H0z" />
-                      <path fill="currentColor"
-                        d="M1.946 9.315c-.522-.174-.527-.455.01-.634l19.087-6.362c.529-.176.832.12.684.638l-5.454 19.086c-.15.529-.455.547-.679.045L12 14l6-8-8 6-8.054-2.685z" />
+                      <path fill="currentColor" d="M1.946 9.315c-.522-.174-.527-.455.01-.634l19.087-6.362c.529-.176.832.12.684.638l-5.454 19.086c-.15.529-.455.547-.679.045L12 14l6-8-8 6-8.054-2.685z" />
                     </svg>
                   </div>
+                  <span id="btnText" class="block ml-[0.3em] transition-all duration-300 ease-in-out group-hover:translate-x-[5em]">Envoyer le devis</span>
                 </div>
-                <span id="btnText" class="block ml-[0.3em] transition-all duration-300 ease-in-out group-hover:translate-x-[5em]">
-                  Envoyer
-                </span>
-              </div>
-              <svg id="btnLoader" class="hidden absolute inset-0 mx-auto my-auto w-6 h-6 text-white animate-spin"
-                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 00-8 8h4z"></path>
-              </svg>
-            </button>
+                <svg id="btnLoader" class="hidden absolute inset-0 mx-auto my-auto w-6 h-6 text-white animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 00-8 8h4z"></path>
+                </svg>
+              </button>
+            </div>
+          </form>
+
+          <div id="toast"></div>
+
+          <script src="https://www.google.com/recaptcha/api.js?render=<?= RECAPTCHA_SITE_KEY ?>"></script>
+          <script>
+            const form = document.getElementById("devisForm");
+            const sendBtn = document.getElementById("sendBtn");
+
+            function showToast(message, type = "success") {
+              const toast = document.getElementById("toast");
+              toast.textContent = message;
+              toast.className = "show " + type;
+              setTimeout(() => toast.classList.remove("show"), 4000);
+            }
+
+            // Change the button type in the HTML to type="button"
+            // and then use the button's click event
+            if (form && sendBtn) {
+              sendBtn.addEventListener("click", function(e) {
+                e.preventDefault(); // This stops the refresh and is good practice
+
+                const formData = new FormData(form);
+                const btnContent = document.getElementById("btnContent");
+                const btnLoader = document.getElementById("btnLoader");
+                btnContent.style.opacity = "0.5";
+                btnLoader.classList.remove("hidden");
+
+                grecaptcha.ready(function() {
+                  grecaptcha.execute("<?= RECAPTCHA_SITE_KEY ?>", {
+                    action: "devis"
+                  }).then(function(token) {
+                    formData.set("recaptcha_token", token);
+                    fetch("send.php", {
+                        method: "POST",
+                        body: formData
+                      })
+                      .then(res => res.json())
+                      .then(data => {
+                        btnContent.style.opacity = "1";
+                        btnLoader.classList.add("hidden");
+                        if (data.status === "success") {
+                          showToast("✅ Devis envoyé avec succès !", "success");
+                          form.reset();
+                        } else showToast("❌ " + data.message, "error");
+                      })
+                      .catch(() => {
+                        btnContent.style.opacity = "1";
+                        btnLoader.classList.add("hidden");
+                        showToast("❌ Erreur réseau. Veuillez réessayer.", "error");
+                      });
+                  });
+                });
+              });
+            }
+          </script>
+
+        <?php else: ?>
+          <div class="text-center p-8 rounded-lg border-2
+    <?= $recaptchaConsent === 'false' ? 'bg-red-50 dark:bg-red-900 border-red-200 dark:border-red-700 text-red-700 dark:text-red-300' :
+            'bg-yellow-50 dark:bg-yellow-900 border-yellow-200 dark:border-yellow-700 text-yellow-700 dark:text-yellow-300' ?>">
+            <h2 class="text-2xl font-bold mb-4">
+              <?= $recaptchaConsent === 'false' ? 'Formulaire non disponible' : 'Action requise' ?>
+            </h2>
+            <p class="text-gray-700 dark:text-gray-300 mb-4">
+              <?= $recaptchaConsent === 'false' ? 'Vous avez refusé les cookies de sécurité, ce qui empêche le fonctionnement du formulaire.' : 'Pour utiliser le formulaire, vous devez d’abord faire un choix concernant les cookies de sécurité via la bannière.' ?>
+            </p>
+            <p class="text-gray-700 dark:text-gray-300 mb-4">
+              <?= $recaptchaConsent === 'false' ? 'Pour nous contacter, veuillez accepter les cookies via la bannière ou envoyer un e-mail directement à <a href="mailto:gpxpc13@gmail.com" class="text-blue-600 hover:underline">gpxpc13@gmail.com</a>.' : 'Si la bannière a disparu, rechargez la page.' ?>
+            </p>
           </div>
-
-          <!-- Message de réponse -->
-          <div id="responseMessage" aria-live="polite" class="text-center font-medium mb-6"></div>
-
-        </form>
+        <?php endif; ?>
       </div>
-
     </div>
   </section>
 </main>
 
 <?php include 'footer.php'; ?>
-
-<script>
-  // 🔹 Affiche ou masque simplement le choix de l'OS
-  document.addEventListener("DOMContentLoaded", () => {
-    const osCheckbox = document.getElementById("installation_os");
-    const osSelect = document.getElementById("osSelect");
-
-    osCheckbox?.addEventListener("change", () => {
-      osSelect.classList.toggle("hidden", !osCheckbox.checked);
-    });
-  });
-
-  // 🔹 Soumission AJAX du formulaire
-  document.getElementById("devisForm").addEventListener("submit", function(e) {
-    e.preventDefault();
-
-    const form = e.target;
-    const formData = new FormData(form);
-
-    // Loader bouton
-    document.getElementById("btnContent").style.opacity = "0.5";
-    document.getElementById("btnLoader").classList.remove("hidden");
-
-    fetch(form.action, {
-        method: "POST",
-        body: formData
-      })
-      .then(response => response.json())
-      .then(data => {
-        // Reset bouton
-        document.getElementById("btnContent").style.opacity = "1";
-        document.getElementById("btnLoader").classList.add("hidden");
-
-        const msg = document.getElementById("responseMessage");
-        if (data.status === "success") {
-          msg.textContent = "✅ " + data.message;
-          msg.className = "text-center font-medium mb-6 text-green-600 dark:text-green-400";
-          form.reset();
-          grecaptcha.reset();
-          document.getElementById("osSelect").classList.add("hidden");
-        } else {
-          msg.textContent = "❌ " + data.message;
-          msg.className = "text-center font-medium mb-6 text-red-600 dark:text-red-400";
-        }
-      })
-      .catch(() => {
-        document.getElementById("btnContent").style.opacity = "1";
-        document.getElementById("btnLoader").classList.add("hidden");
-
-        const msg = document.getElementById("responseMessage");
-        msg.textContent = "❌ Erreur réseau. Veuillez réessayer.";
-        msg.className = "text-center font-medium mb-6 text-red-600 dark:text-red-400";
-      });
-  });
-</script>

@@ -4,47 +4,15 @@ declare(strict_types=1);
 
 require 'config.php'; // contient RECAPTCHA_SITE_KEY et RECAPTCHA_SECRET_KEY
 
-// 1. Vérif reCAPTCHA
-$response = $_POST['g-recaptcha-response'] ?? '';
-$verifyUrl = 'https://www.google.com/recaptcha/api/siteverify'
-    . '?secret='   . urlencode(RECAPTCHA_SECRET_KEY)
-    . '&response=' . urlencode($response)
-    . '&remoteip=' . $_SERVER['REMOTE_ADDR'];
-
-$result = file_get_contents($verifyUrl);
-$data   = json_decode($result);
-
-if (empty($data->success) || $data->success !== true) {
-    die(json_encode(['status' => 'error', 'message' => 'Erreur reCAPTCHA : cochez “Je ne suis pas un robot”.']));
-}
+// -----------------------------------------------------------------------------
+// CONFIGURATION
+// -----------------------------------------------------------------------------
+$contactEmail = $_ENV['CONTACT_EMAIL'] ?? getenv('CONTACT_EMAIL') ?? 'gpxpc13@gmail.com';
+$brevoApiKey  = $_ENV['BREVO_API_KEY'] ?? getenv('BREVO_API_KEY') ?? '';
+if (!$brevoApiKey) jsonError('Erreur de configuration serveur (clé API manquante).', 500);
 
 // -----------------------------------------------------------------------------
-// CONSTANTES
-// -----------------------------------------------------------------------------
-const MAX_FIELD_LENGTHS = [
-    'name'           =>  50,
-    'email'          => 100,
-    'phone'          =>  20,
-    'budget'         =>  10,
-    'details'        => 1000,
-    'service_value'  => 100,
-    'osType'         =>  50,
-    'message'        => 2000,
-];
-const RATE_LIMIT_SECONDS   = 10;
-const MAX_PAYLOAD_SIZE     = 10_000;
-const MAX_FAILED_ATTEMPTS  = 10;
-const FAILED_BLOCK_WINDOW  = 3600;
-
-// -----------------------------------------------------------------------------
-// AUTOLOAD & ENV
-// -----------------------------------------------------------------------------
-require_once __DIR__ . '/vendor/autoload.php';
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-$dotenv->load();
-
-// -----------------------------------------------------------------------------
-// HEADERS
+// HEADERS DE SÉCURITÉ
 // -----------------------------------------------------------------------------
 header('Content-Type: application/json; charset=utf-8');
 header('Strict-Transport-Security: max-age=31536000; includeSubDomains; preload');
@@ -65,8 +33,27 @@ session_set_cookie_params([
 session_start();
 
 ini_set('display_errors', '0');
-ini_set('log_errors',     '1');
-ini_set('error_log',      __DIR__ . '/logs/errors.log');
+ini_set('log_errors',  '1');
+ini_set('error_log',   __DIR__ . '/logs/errors.log');
+
+// -----------------------------------------------------------------------------
+// CONSTANTES
+// -----------------------------------------------------------------------------
+const MAX_FIELD_LENGTHS = [
+    'name'          => 50,
+    'email'         => 100,
+    'phone'         => 20,
+    'budget'        => 10,
+    'details'       => 1000,
+    'service_value' => 100,
+    'osType'        => 50,
+    'message'       => 2000,
+    'pc_type'       => 20,
+];
+const RATE_LIMIT_SECONDS   = 0;
+const MAX_PAYLOAD_SIZE     = 10_000;
+const MAX_FAILED_ATTEMPTS  = 10;
+const FAILED_BLOCK_WINDOW  = 3600;
 
 // -----------------------------------------------------------------------------
 // FONCTIONS JSON
@@ -77,15 +64,25 @@ function jsonError(string $msg, int $code = 400): void
     echo json_encode(['status' => 'error', 'message' => $msg]);
     exit;
 }
+
 function jsonSuccess(string $msg): void
 {
     echo json_encode(['status' => 'success', 'message' => $msg]);
     exit;
 }
 
+function validateFieldLength(string $value, string $field, int $max): void
+{
+    if (!$value || mb_strlen($value) > $max) {
+        jsonError("$field invalide.", 400);
+    }
+}
+
 // -----------------------------------------------------------------------------
-// PROTECTION : payload + brute force
+// PROTECTIONS : METHOD, PAYLOAD, BRUTE FORCE
 // -----------------------------------------------------------------------------
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') jsonError('Méthode non autorisée.', 405);
+
 if (!empty($_SERVER['CONTENT_LENGTH']) && (int)$_SERVER['CONTENT_LENGTH'] > MAX_PAYLOAD_SIZE) {
     jsonError('Requête trop volumineuse.', 413);
 }
@@ -95,24 +92,17 @@ if (!isset($_SESSION['failed'][$ip])) {
     $_SESSION['failed'][$ip] = ['count' => 0, 'first' => time()];
 }
 $fail = &$_SESSION['failed'][$ip];
+
 if (time() - $fail['first'] < FAILED_BLOCK_WINDOW) {
-    if ($fail['count'] >= MAX_FAILED_ATTEMPTS) {
-        jsonError('Trop de tentatives. Réessayez plus tard.', 429);
-    }
+    if ($fail['count'] >= MAX_FAILED_ATTEMPTS) jsonError('Trop de tentatives. Réessayez plus tard.', 429);
 } else {
     $fail = ['count' => 0, 'first' => time()];
-}
-
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    jsonError('Méthode non autorisée.', 405);
 }
 
 // -----------------------------------------------------------------------------
 // CSRF
 // -----------------------------------------------------------------------------
-if (empty($_SESSION['csrf_token'])) {
-    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-}
+if (empty($_SESSION['csrf_token'])) $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 $token = $_POST['csrf_token'] ?? '';
 if (!hash_equals($_SESSION['csrf_token'], $token)) {
     $fail['count']++;
@@ -130,148 +120,158 @@ $_SESSION['last_submit'] = time();
 // -----------------------------------------------------------------------------
 // HONEYPOT
 // -----------------------------------------------------------------------------
-if (!empty($_POST['website'])) {
-    jsonError('Spam détecté.', 400);
+if (!empty($_POST['website'])) jsonError('Spam détecté.', 400);
+
+// -----------------------------------------------------------------------------
+// reCAPTCHA v3
+// -----------------------------------------------------------------------------
+$response = $_POST['recaptcha_token'] ?? '';
+if (!$response) jsonError('Le jeton reCAPTCHA est manquant.', 400);
+
+$ch = curl_init('https://www.google.com/recaptcha/api/siteverify');
+curl_setopt_array($ch, [
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_POST           => true,
+    CURLOPT_POSTFIELDS     => http_build_query([
+        'secret'   => RECAPTCHA_SECRET_KEY,
+        'response' => $response,
+        'remoteip' => $ip
+    ]),
+]);
+$result = curl_exec($ch);
+curl_close($ch);
+
+$data = json_decode($result, true);
+if (empty($data['success']) || $data['score'] < 0.5) {
+    jsonError('Erreur reCAPTCHA : veuillez réessayer plus tard ou contacter GPX PC.', 400);
 }
 
 // -----------------------------------------------------------------------------
-// CHAMPS COMMUNS
+// VALIDATION CHAMPS COMMUNS
 // -----------------------------------------------------------------------------
 $formType = $_POST['formType'] ?? 'contact';
-$name     = trim($_POST['name']    ?? '');
-$email    = trim($_POST['email']   ?? '');
+$name     = trim($_POST['name'] ?? '');
+$email    = trim($_POST['email'] ?? '');
+$phone    = trim($_POST['phone'] ?? '');
+$services = $_POST['services'] ?? [];
 
-if ($name === '' || mb_strlen($name) > MAX_FIELD_LENGTHS['name'] || !preg_match("/^[A-Za-zÀ-ÖØ-öø-ÿ' -]+$/u", $name)) {
+if (!$name || mb_strlen($name) > MAX_FIELD_LENGTHS['name'] || !preg_match("/^[A-Za-zÀ-ÖØ-öø-ÿ' -]+$/u", $name)) {
     jsonError('Nom invalide.', 400);
 }
-if ($email === '' || mb_strlen($email) > MAX_FIELD_LENGTHS['email'] || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+if (!$email || mb_strlen($email) > MAX_FIELD_LENGTHS['email'] || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
     jsonError('Email invalide.', 400);
 }
 
 // -----------------------------------------------------------------------------
-// BRANCHE : CONTACT
+// TRAITEMENT SELON LE TYPE DE FORMULAIRE
 // -----------------------------------------------------------------------------
-if ($formType === 'contact') {
-    $message = trim($_POST['message'] ?? '');
-    if ($message === '' || mb_strlen($message) > MAX_FIELD_LENGTHS['message']) {
-        jsonError('Message requis ou trop long.', 400);
-    }
+switch ($formType) {
+    case 'devis':
+        $budget     = trim($_POST['budget'] ?? '');
+        $details    = trim($_POST['details'] ?? '');
+        $resolution = trim($_POST['resolution'] ?? '');
+        $rgb        = trim($_POST['rgb'] ?? '');
+        $theme      = trim($_POST['theme'] ?? '');
+        $cpuBrand   = trim($_POST['processeur'] ?? '');
+        $gpuBrand   = trim($_POST['carte_graphique'] ?? '');
+        $boitier    = trim($_POST['boitier'] ?? '');
+        $proUsage   = $_POST['pro_usage'] ?? [];
 
-    $subject = 'Nouveau message de contact';
-    $htmlContent = "
-        <h2>Contact</h2>
-        <p><strong>Nom :</strong> " . htmlspecialchars($name) . "</p>
-        <p><strong>Email :</strong> " . htmlspecialchars($email) . "</p>
-        <p><strong>Message :</strong><br>" . nl2br(htmlspecialchars($message)) . "</p>
-    ";
-
-    // -----------------------------------------------------------------------------
-    // BRANCHE : DEVIS
-    // -----------------------------------------------------------------------------
-} elseif ($formType === 'devis') {
-    $phone   = trim($_POST['phone']   ?? '');
-    $budget  = trim($_POST['budget']  ?? '');
-    $details = trim($_POST['details'] ?? '');
-    $services = $_POST['services']    ?? [];
-
-    // Champ OS seulement
-    $osType = trim($_POST['os_choice'] ?? '');
-
-    if ($phone !== '' && mb_strlen($phone) > MAX_FIELD_LENGTHS['phone']) jsonError('Téléphone invalide.', 400);
-    if ($budget !== '' && mb_strlen($budget) > MAX_FIELD_LENGTHS['budget']) jsonError('Budget trop long.', 400);
-    if ($details === '' || mb_strlen($details) > MAX_FIELD_LENGTHS['details']) jsonError('Détails requis ou trop longs.', 400);
-    if (mb_strlen($osType) > MAX_FIELD_LENGTHS['osType']) jsonError('Choix du système d’exploitation invalide.', 400);
-
-    if (!is_array($services)) $services = [$services];
-    $servicesClean = [];
-    foreach ($services as $svc) {
-        $svc = trim($svc);
-        if ($svc !== '' && mb_strlen($svc) <= MAX_FIELD_LENGTHS['service_value']) {
-            $servicesClean[] = htmlspecialchars($svc);
+        if (!is_numeric($budget) || (int)$budget <= 0) {
+            jsonError('Budget invalide.', 400);
         }
-    }
-    $servicesHtml = $servicesClean
-        ? '<ul><li>' . implode('</li><li>', $servicesClean) . '</li></ul>'
-        : '<p>Aucun service sélectionné.</p>';
 
-    $osDisplay = $osType !== '' ? htmlspecialchars($osType) : 'Aucun système sélectionné';
-
-    $subject = 'Demande de devis PC';
-    $htmlContent = "
-        <h2>Demande de Devis</h2>
-        <p><strong>Nom :</strong> " . htmlspecialchars($name) . "</p>
-        <p><strong>Email :</strong> " . htmlspecialchars($email) . "</p>
-        <p><strong>Téléphone :</strong> " . htmlspecialchars($phone) . "</p>
-        <p><strong>Budget :</strong> " . htmlspecialchars($budget) . "</p>
-        <p><strong>Système d’exploitation :</strong> {$osDisplay}</p>
-        <p><strong>Services :</strong><br>{$servicesHtml}</p>
-        <p><strong>Détails :</strong><br>" . nl2br(htmlspecialchars($details)) . "</p>
-    ";
-
-    // -----------------------------------------------------------------------------
-    // BRANCHE : RÉPARATION
-    // -----------------------------------------------------------------------------
-} elseif ($formType === 'reparation') {
-    $pcType  = trim($_POST['pc_type'] ?? '');
-    $urgency = trim($_POST['urgency'] ?? '');
-    $message = trim($_POST['message'] ?? '');
-    $services = $_POST['services'] ?? [];
-
-    if ($pcType === '' || $urgency === '' || $message === '') jsonError('Tous les champs sont obligatoires.', 400);
-    if (mb_strlen($message) > MAX_FIELD_LENGTHS['message']) jsonError('Message trop long.', 400);
-
-    if (!is_array($services)) $services = [$services];
-    $servicesClean = [];
-    foreach ($services as $svc) {
-        $svc = trim($svc);
-        if ($svc !== '' && mb_strlen($svc) <= MAX_FIELD_LENGTHS['service_value']) {
-            $servicesClean[] = htmlspecialchars($svc);
+        validateFieldLength($details, 'Détails du projet', MAX_FIELD_LENGTHS['details']);
+        foreach (['resolution' => $resolution, 'rgb' => $rgb, 'theme' => $theme, 'processeur' => $cpuBrand, 'carte graphique' => $gpuBrand, 'boîtier' => $boitier] as $label => $val) {
+            validateFieldLength($val, ucfirst($label), MAX_FIELD_LENGTHS['osType']);
         }
-    }
-    $servicesHtml = $servicesClean
-        ? '<ul><li>' . implode('</li><li>', $servicesClean) . '</li></ul>'
-        : '<p>Aucun service sélectionné.</p>';
 
-    $subject = 'Réparation & Entretien';
-    $htmlContent = "
-        <h2>Demande de Réparation & Entretien</h2>
-        <p><strong>Nom :</strong> " . htmlspecialchars($name) . "</p>
-        <p><strong>Email :</strong> " . htmlspecialchars($email) . "</p>
-        <p><strong>Type d’ordinateur :</strong> " . htmlspecialchars($pcType) . "</p>
-        <p><strong>Urgence :</strong> " . htmlspecialchars($urgency) . "</p>
-        <p><strong>Services :</strong><br>{$servicesHtml}</p>
-        <p><strong>Description :</strong><br>" . nl2br(htmlspecialchars($message)) . "</p>
-    ";
-} else {
-    jsonError('Type de formulaire inconnu.', 400);
+        $proUsageStr = implode(', ', array_map('htmlspecialchars', (array)$proUsage));
+        $serviceList = $services ? '<ul><li>' . implode('</li><li>', array_map('htmlspecialchars', $services)) . '</li></ul>' : 'Aucun service supplémentaire sélectionné.';
+
+        $subject = 'Demande de devis GPX PC';
+        $htmlContent = "
+            <h2>Nouvelle demande de devis</h2>
+            <p><strong>Nom:</strong> " . htmlspecialchars($name) . "</p>
+            <p><strong>Email:</strong> " . htmlspecialchars($email) . "</p>
+            <p><strong>Téléphone:</strong> " . htmlspecialchars($phone) . "</p>
+            <p><strong>Budget:</strong> " . htmlspecialchars($budget) . " €</p>
+            <h3>Préférences utilisateur :</h3>
+            <ul>
+                <li><strong>Résolution préférée :</strong> " . htmlspecialchars($resolution) . "</li>
+                <li><strong>RGB :</strong> " . htmlspecialchars($rgb) . "</li>
+                <li><strong>Thème :</strong> " . htmlspecialchars($theme) . "</li>
+                <li><strong>Processeur :</strong> " . htmlspecialchars($cpuBrand) . "</li>
+                <li><strong>Carte graphique :</strong> " . htmlspecialchars($gpuBrand) . "</li>
+                <li><strong>Utilisation professionnelle :</strong> $proUsageStr</li>
+                <li><strong>Boîtier :</strong> " . htmlspecialchars($boitier) . "</li>
+            </ul>
+            <h3>Détails du projet :</h3><p>" . nl2br(htmlspecialchars($details)) . "</p>
+            <h3>Services supplémentaires :</h3>{$serviceList}
+        ";
+        break;
+
+    case 'contact':
+        $message = trim($_POST['message'] ?? '');
+        validateFieldLength($message, 'Message', MAX_FIELD_LENGTHS['message']);
+
+        $subject = 'Message depuis le formulaire de contact';
+        $htmlContent = "
+            <h2>Nouveau message de contact</h2>
+            <p><strong>Nom:</strong> " . htmlspecialchars($name) . "</p>
+            <p><strong>Email:</strong> " . htmlspecialchars($email) . "</p>
+            <p><strong>Téléphone:</strong> " . htmlspecialchars($phone) . "</p>
+            <h3>Message :</h3><p>" . nl2br(htmlspecialchars($message)) . "</p>
+        ";
+        break;
+
+    case 'reparation':
+        $message = trim($_POST['message'] ?? '');
+        $pcType  = trim($_POST['pc_type'] ?? '');
+
+        validateFieldLength($message, 'Message', MAX_FIELD_LENGTHS['message']);
+        validateFieldLength($pcType, 'Type de PC', MAX_FIELD_LENGTHS['pc_type']);
+
+        $serviceList = $services ? '<ul><li>' . implode('</li><li>', array_map('htmlspecialchars', $services)) . '</li></ul>' : 'Aucun service supplémentaire sélectionné.';
+
+        $subject = 'Demande de réparation depuis le site GPX PC';
+        $htmlContent = "
+            <h2>Nouvelle demande de réparation</h2>
+            <p><strong>Nom:</strong> " . htmlspecialchars($name) . "</p>
+            <p><strong>Email:</strong> " . htmlspecialchars($email) . "</p>
+            <p><strong>Téléphone:</strong> " . htmlspecialchars($phone) . "</p>
+            <h3>Informations :</h3>
+            <ul><li><strong>Type de PC:</strong> " . htmlspecialchars($pcType) . "</li></ul>
+            <h3>Services souhaités :</h3>{$serviceList}
+            <h3>Message :</h3><p>" . nl2br(htmlspecialchars($message)) . "</p>
+        ";
+        break;
+
+    default:
+        jsonError('Type de formulaire inconnu.', 400);
 }
 
 // -----------------------------------------------------------------------------
 // ENVOI VIA BREVO
 // -----------------------------------------------------------------------------
 $payload = [
-    'sender'      => ['name' => 'GPX PC', 'email' => $_ENV['CONTACT_EMAIL'] ?? getenv('CONTACT_EMAIL')],
+    'sender'      => ['name' => 'GPX PC', 'email' => $contactEmail],
     'replyTo'     => ['email' => $email, 'name' => $name],
-    'to'          => [['email' => $_ENV['CONTACT_EMAIL'] ?? getenv('CONTACT_EMAIL')]],
+    'to'          => [['email' => $contactEmail]],
     'subject'     => $subject,
     'htmlContent' => $htmlContent
 ];
-
-
-
-$apiKey = $_ENV['BREVO_API_KEY'] ?? getenv('BREVO_API_KEY') ?? '';
-if ($apiKey === '') jsonError('Erreur de configuration serveur.', 500);
 
 $ch = curl_init('https://api.brevo.com/v3/smtp/email');
 curl_setopt_array($ch, [
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_POST           => true,
     CURLOPT_HTTPHEADER     => [
-        'api-key: '      . $apiKey,
-        'Content-Type: ' . 'application/json'
+        'api-key: '      . $brevoApiKey,
+        'Content-Type: application/json'
     ],
     CURLOPT_POSTFIELDS     => json_encode($payload),
-    CURLOPT_TIMEOUT        => 10
+    CURLOPT_TIMEOUT        => 15
 ]);
 
 $response = curl_exec($ch);
@@ -280,6 +280,7 @@ curl_close($ch);
 
 if ($httpCode === 201) {
     unset($_SESSION['failed'][$ip]);
+    $_SESSION['last_submit'] = time();
     jsonSuccess('Message envoyé avec succès !');
 }
 
