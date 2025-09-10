@@ -11,7 +11,7 @@ include 'header.php';
     "@type": "LocalBusiness",
     "name": "GPX PC",
     "image": "https://gpxpc1.whf.bz/logo/Logo.png",
-    "description": "Expert en montage et réparation de PC sur mesure à Marseille. Services pour PC gamer et professionnels avec livraison possible dans toute la France.",
+    "description": "Expert en montage et r\u00e9paration de PC sur mesure \u00e0 Marseille. Services pour PC gamer et professionnels avec livraison possible dans toute la France.",
     "address": {
       "@type": "PostalAddress",
       "addressLocality": "Marseille",
@@ -55,7 +55,6 @@ include 'header.php';
 
 <main class="flex-grow bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100">
 
-  <!-- Hero -->
   <section class="bg-gradient-to-r from-[#3857cb] to-[#2c469f] text-white text-center py-20 px-6">
     <h1 class="text-4xl sm:text-5xl font-extrabold mb-4 drop-shadow-lg">
       Votre Expert en Montage PC sur Mesure à Marseille
@@ -65,12 +64,13 @@ include 'header.php';
     </p>
   </section>
 
-  <!-- Services -->
   <section class="py-16 px-6 max-w-6xl mx-auto">
     <h2 class="text-3xl font-bold text-[#3857cb] dark:text-blue-400 text-center mb-12">
-      Mes services de montage et réparation PC
+      Services de Montage et Réparation PC à Marseille
     </h2>
-
+    <p class="text-center text-gray-600 dark:text-gray-400 max-w-2xl mx-auto mb-8">
+      De la conception à l'optimisation, GPX PC propose une gamme complète de services informatiques pour répondre à tous vos besoins, que vous soyez un gamer, un créateur de contenu ou un professionnel.
+    </p>
     <div class="grid gap-8 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
       <?php
       $services = [
@@ -91,31 +91,31 @@ include 'header.php';
     </div>
   </section>
 
-  <!-- Devis -->
   <section id="devis" class="bg-gradient-to-r from-[#3857cb] to-[#2c469f] py-16 px-6">
     <div class="max-w-4xl mx-auto text-center">
-      <h2 class="text-3xl font-bold text-white mb-4">Demandez votre devis gratuit</h2>
+      <h2 class="text-3xl font-bold text-white mb-4">Demandez votre devis gratuit pour un PC sur-mesure</h2>
       <p class="text-gray-200 mb-6">
-        Décrivez votre projet et recevez une estimation personnalisée, rapide et sans engagement.
+        Que vous ayez besoin d'une bête de course pour le jeu ou d'une machine de travail performante, décrivez votre projet et recevez une estimation personnalisée, rapide et sans engagement.
       </p>
       <a href="devis.php" class="cta-btn">Obtenir un devis</a>
     </div>
   </section>
 
-  <!-- À propos -->
   <section class="bg-white dark:bg-gray-800 py-16 px-6">
     <div class="max-w-3xl mx-auto text-center">
-      <h2 class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">À propos de moi</h2>
+      <h2 class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">À propos de GPX PC, votre expert à Marseille</h2>
       <p class="text-gray-500 dark:text-gray-400 mb-4">
         Passionné d’informatique, je construis et répare des PC depuis plus de 5 ans. J’aide gamers, créateurs et pros à obtenir des performances optimales.
       </p>
+      <p class="text-gray-500 dark:text-gray-400 mb-4">
+        Basé à Marseille, GPX PC offre un service personnalisé et transparent, du choix des composants à l'assemblage final, avec la possibilité de livraison sécurisée dans toute la France.
+      </p>
       <p class="text-gray-500 dark:text-gray-400">
-        <a href="devis.php" class="text-blue-600 hover:underline">Contactez-moi</a> pour un accompagnement sur-mesure, rapide et transparent.
+        <a href="contact.php" class="text-blue-600 hover:underline">Contactez-moi</a> pour un accompagnement sur-mesure, rapide et transparent.
       </p>
     </div>
   </section>
 
-  <!-- Call to Action Contact -->
   <section class="bg-gradient-to-r from-[#3857cb] to-[#2c469f] py-16 px-6">
     <div class="max-w-2xl mx-auto text-center">
       <h2 class="text-3xl font-bold text-white mb-4">Prêt à donner vie à votre projet ?</h2>

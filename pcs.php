@@ -18,7 +18,7 @@ include 'header.php';
                     "@context" => "https://schema.org",
                     "@type" => "Product",
                     "name" => $pc['name'],
-                    "description" => "Configuration PC " . $pc['name'] . " assemblée par GPX PC, optimisée pour la performance.",
+                    "description" => "Configuration PC " . $pc['name'] . " assemblée par GPX PC, optimisée pour la performance. Idéale pour le gaming, le streaming, le montage vidéo ou la bureautique.",
                     "image" => $siteUrl . "logo/Logo.png",
                     "sku" => "GPX-" . preg_replace('/[^A-Z0-9]/', '-', strtoupper($pc['name'])),
                     "brand" => ["@type" => "Brand", "name" => "GPX PC"],
@@ -106,33 +106,33 @@ include 'header.php';
 </style>
 
 <main class="px-4 sm:px-8 py-16 bg-gray-50 dark:bg-gray-900 transition-colors duration-500">
-    <h1 class="text-center text-4xl sm:text-5xl font-extrabold mb-6 text-gray-900 dark:text-white drop-shadow-lg">
+
+    <h1 class="text-center text-4xl sm:text-5xl font-extrabold mb-8 text-gray-900 dark:text-white drop-shadow-lg">
         Nos Configurations PC Gamer, Pro et Bureautique
     </h1>
-    <p class="text-center max-w-2xl mx-auto text-gray-600 dark:text-gray-300 mb-12">
-        Découvrez nos PC conçus pour le <strong>gaming</strong>, le <strong>streaming</strong>, le <strong>montage</strong>, l'<strong>IA</strong>, le <strong>rendu 3D</strong> et la <strong>bureautique</strong>.
-        Assemblés avec soin dans notre atelier à <strong>Marseille</strong>, livrés partout en France.
-    </p>
 
-    <!-- Filtres -->
-    <div class="flex flex-wrap justify-center gap-4 mb-8">
+    <div class="max-w-3xl mx-auto mb-10 bg-white dark:bg-gray-800 rounded-xl shadow p-4 flex items-center justify-center gap-3 text-gray-700 dark:text-gray-300 text-sm">
+        <span class="text-blue-500 text-lg">🔍</span>
+        <span><strong>Prix indicatif</strong> – basé sur le coût fournisseur du jour</span>
+        <span class="bg-blue-100 text-blue-600 px-2 py-0.5 rounded-full text-xs font-medium">À voir sur le devis</span>
+    </div>
+
+    <div class="flex flex-wrap justify-center gap-3 mb-8">
         <button class="filter-btn active" data-category="all">Tout</button>
         <?php foreach ($pcs as $category => $configs): ?>
             <button class="filter-btn" data-category="<?= htmlspecialchars($category) ?>"><?= htmlspecialchars($category) ?></button>
         <?php endforeach; ?>
     </div>
 
-    <!-- Recherche -->
     <div class="max-w-xl mx-auto mb-12">
         <input type="text" id="searchInput" placeholder="Rechercher un PC ou composant..."
             class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white" />
     </div>
 
-    <!-- Cartes -->
     <div id="pcsContainer">
         <?php foreach ($pcs as $category => $configs): ?>
             <section class="pt-4 pc-category show-category" data-category="<?= htmlspecialchars($category) ?>">
-                <h2 class="text-2xl mt-6 sm:text-3xl font-bold text-gray-800 dark:text-white mb-12 text-center"><?= htmlspecialchars($category) ?></h2>
+                <h2 class="text-2xl mt-6 sm:text-3xl font-bold text-gray-800 dark:text-white mb-10 text-center">Nos configurations <?= htmlspecialchars($category) ?></h2>
                 <div class="grid gap-8 mx-auto px-4 items-start sm:grid-cols-2 lg:grid-cols-3">
                     <?php foreach ($configs as $config): ?>
                         <div class="pc-card bg-white dark:bg-gray-800 rounded-2xl shadow-md p-6 lg:p-8 flex flex-col h-auto hide"
@@ -146,7 +146,14 @@ include 'header.php';
                                 <?php endif; ?>
                             </h3>
 
-                            <p class="text-2xl font-bold text-blue-600 mb-4"><?= number_format($config['price'], 2, ',', ' ') ?> €</p>
+                            <p class="text-2xl font-bold text-blue-600 mb-4 flex items-center gap-2">
+                                <?= number_format($config['price'], 2, ',', ' ') ?> €
+                                <span class="text-xs font-medium bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded-full"
+                                    title="Le prix est basé sur le coût fournisseur du jour et peut varier."
+                                    style="cursor: default;">
+                                    Prix indicatif
+                                </span>
+                            </p>
 
                             <p class="font-semibold text-gray-900 dark:text-white">Résumé :</p>
                             <ul class="list-disc list-inside text-gray-700 dark:text-gray-300 mb-4 space-y-1">
@@ -171,7 +178,9 @@ include 'header.php';
                                 </ul>
                             </div>
 
-                            <a href="contact.php?pc=<?= urlencode($config['name']) ?>" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-lg rounded-xl text-center shadow-lg transform transition duration-300 hover:scale-105 hover:shadow-2xl mt-auto">🚀 Choisir ce PC</a>
+                            <a href="contact.php?pc=<?= urlencode($config['name']) ?>" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-lg rounded-xl text-center shadow-lg transform transition duration-300 hover:scale-105 hover:shadow-2xl mt-auto">
+                                Choisir ce PC
+                            </a>
                         </div>
                     <?php endforeach; ?>
                 </div>

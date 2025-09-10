@@ -64,13 +64,12 @@ if (empty($_SESSION['csrf_token'])) {
   <section class="py-16 px-6">
     <div class="max-w-3xl mx-auto bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 shadow-lg rounded-lg overflow-hidden transition-colors duration-500">
 
-      <!-- Header Formulaire -->
       <div class="px-8 py-12 text-center">
         <h1 class="text-4xl sm:text-5xl font-extrabold text-[#3857cb] dark:text-blue-400 mb-4 drop-shadow-lg">
           Réparation et Entretien de PC à Marseille
         </h1>
         <p class="text-lg sm:text-xl text-gray-500 dark:text-gray-400 max-w-xl mx-auto">
-          Un problème avec votre ordinateur ? Demandez un service de <strong>réparation</strong>, <strong>nettoyage</strong>, <strong>optimisation</strong>, ou de <strong>récupération de données</strong>. Intervention à <strong>Marseille</strong> et services pour toute la France.
+          Un problème avec votre ordinateur ? Demandez un service de <strong>réparation</strong>, <strong>nettoyage</strong>, <strong>optimisation</strong>, ou de <strong>récupération de données</strong>.
         </p>
       </div>
 
@@ -81,15 +80,13 @@ if (empty($_SESSION['csrf_token'])) {
             <input type="hidden" name="formType" value="reparation">
             <input type="hidden" name="recaptcha_token" id="recaptcha_token">
 
-            <!-- Informations contact -->
             <div class="p-6 bg-gray-50 dark:bg-gray-900 rounded-xl shadow-inner space-y-4">
-              <h2 class="text-2xl font-semibold text-gray-700 dark:text-gray-200 mb-2">Informations de contact</h2>
+              <h2 class="text-2xl font-semibold text-gray-700 dark:text-gray-200 mb-4">Informations de contact</h2>
               <input type="text" name="name" placeholder="Nom complet *" required aria-label="Nom complet" class="w-full px-4 py-2 rounded-md border border-gray-300 dark:border-gray-700 focus:ring-2 focus:ring-[#3857cb] dark:focus:ring-blue-400 bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
               <input type="email" name="email" placeholder="Email *" required aria-label="Adresse email" class="w-full px-4 py-2 rounded-md border border-gray-300 dark:border-gray-700 focus:ring-2 focus:ring-[#3857cb] dark:focus:ring-blue-400 bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
               <input type="tel" name="phone" placeholder="Téléphone (optionnel)" aria-label="Numéro de téléphone" class="w-full px-4 py-2 rounded-md border border-gray-300 dark:border-gray-700 focus:ring-2 focus:ring-[#3857cb] dark:focus:ring-blue-400 bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
             </div>
 
-            <!-- Type de PC -->
             <div class="p-6 bg-gray-50 dark:bg-gray-900 rounded-xl shadow-inner space-y-4">
               <label for="pc_type" class="block text-gray-700 dark:text-gray-300 font-semibold">Type de PC *</label>
               <select id="pc_type" name="pc_type" required class="w-full px-4 py-2 rounded-md border border-gray-300 dark:border-gray-700 focus:ring-2 focus:ring-[#3857cb] dark:focus:ring-blue-400 bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
@@ -102,7 +99,6 @@ if (empty($_SESSION['csrf_token'])) {
               </p>
             </div>
 
-            <!-- Urgence -->
             <div class="p-6 bg-gray-50 dark:bg-gray-900 rounded-xl shadow-inner space-y-4">
               <label for="urgency" class="block text-gray-700 dark:text-gray-300 font-semibold">Urgence de la réparation *</label>
               <select id="urgency" name="urgency" required class="w-full px-4 py-2 rounded-md border border-gray-300 dark:border-gray-700 focus:ring-2 focus:ring-[#3857cb] dark:focus:ring-blue-400 bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
@@ -112,7 +108,6 @@ if (empty($_SESSION['csrf_token'])) {
               </select>
             </div>
 
-            <!-- Services -->
             <div class="p-6 bg-gray-50 dark:bg-gray-900 rounded-xl shadow-inner space-y-4">
               <label class="block text-gray-700 dark:text-gray-300 font-semibold">Service souhaité *</label>
               <div class="space-y-2">
@@ -121,6 +116,7 @@ if (empty($_SESSION['csrf_token'])) {
                   'Nettoyage complet / dépoussiérage',
                   'Changement de composants (RAM, SSD, GPU…)',
                   'Réinstallation ou optimisation Windows',
+                  'Récupération de données',
                   'Autre (préciser ci-dessous)'
                 ];
                 foreach ($services as $s): ?>
@@ -132,7 +128,6 @@ if (empty($_SESSION['csrf_token'])) {
               </div>
             </div>
 
-            <!-- Message -->
             <div class="p-6 bg-gray-50 dark:bg-gray-900 rounded-xl shadow-inner space-y-4">
               <textarea name="message" rows="6" placeholder="Décris le problème ou le service souhaité…" required aria-label="Message"
                 class="w-full px-4 py-2 rounded-md border border-gray-300 dark:border-gray-700 focus:ring-2 focus:ring-[#3857cb] dark:focus:ring-blue-400 bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200"></textarea>
@@ -146,7 +141,6 @@ if (empty($_SESSION['csrf_token'])) {
               de Google.
             </p>
 
-            <!-- Bouton Envoyer -->
             <div class="flex justify-center">
               <button type="button" id="sendBtn" class="m-4 fly-yoyo relative overflow-hidden flex items-center bg-gradient-to-r from-[#3857cb] to-[#2c469f] text-white font-sans text-[20px] px-4 py-2 pl-[0.9em] rounded-[16px] transition-all duration-200 active:scale-[0.95] cursor-pointer group">
                 <div id="btnContent" class="flex items-center transition-opacity duration-200">

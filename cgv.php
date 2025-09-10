@@ -52,7 +52,13 @@ include 'header.php';
         foreach ($sections as $title => $paragraphs) {
             echo "<h2 class='text-2xl font-semibold mt-6 mb-2'>{$title}</h2>";
             foreach ($paragraphs as $p) {
-                echo "<p>{$p}</p>";
+                // Afficher le contenu des paragraphes.
+                // Le contenu est déjà du HTML pour la liste, donc on vérifie si c'est une liste.
+                if (strpos(trim($p), '<ul>') === 0) {
+                    echo $p;
+                } else {
+                    echo "<p>{$p}</p>";
+                }
             }
         }
         ?>

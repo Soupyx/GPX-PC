@@ -2,14 +2,26 @@
 
 declare(strict_types=1);
 
-require 'config.php'; // contient RECAPTCHA_SITE_KEY et RECAPTCHA_SECRET_KEY
+require 'config.php'; // Charge BREVO_API_KEY, CONTACT_EMAIL et RECAPTCHA_SECRET_KEY
 
 // -----------------------------------------------------------------------------
-// CONFIGURATION
+// Vérification des constantes
 // -----------------------------------------------------------------------------
-$contactEmail = $_ENV['CONTACT_EMAIL'] ?? getenv('CONTACT_EMAIL') ?? 'gpxpc13@gmail.com';
-$brevoApiKey  = $_ENV['BREVO_API_KEY'] ?? getenv('BREVO_API_KEY') ?? '';
-if (!$brevoApiKey) jsonError('Erreur de configuration serveur (clé API manquante).', 500);
+if (empty(CONTACT_EMAIL) || empty(BREVO_API_KEY) || empty(RECAPTCHA_SECRET_KEY)) {
+    error_log("❌ Erreur config : Une des clés de configuration est vide !");
+    http_response_code(500);
+    echo json_encode(['status' => 'error', 'message' => 'Erreur de configuration serveur.']);
+    exit;
+}
+
+$contactEmail       = CONTACT_EMAIL;
+$brevoApiKey        = BREVO_API_KEY;
+$recaptchaSecretKey = RECAPTCHA_SECRET_KEY;
+
+// -----------------------------------------------------------------------------
+// Détection si local
+// -----------------------------------------------------------------------------
+$isLocal = in_array($_SERVER['SERVER_NAME'], ['localhost', '127.0.0.1']);
 
 // -----------------------------------------------------------------------------
 // HEADERS DE SÉCURITÉ
@@ -33,8 +45,8 @@ session_set_cookie_params([
 session_start();
 
 ini_set('display_errors', '0');
-ini_set('log_errors',  '1');
-ini_set('error_log',   __DIR__ . '/logs/errors.log');
+ini_set('log_errors', '1');
+ini_set('error_log', __DIR__ . '/logs/errors.log');
 
 // -----------------------------------------------------------------------------
 // CONSTANTES
@@ -120,30 +132,53 @@ $_SESSION['last_submit'] = time();
 // -----------------------------------------------------------------------------
 // HONEYPOT
 // -----------------------------------------------------------------------------
-if (!empty($_POST['website'])) jsonError('Spam détecté.', 400);
+if (!$isLocal && !empty($_POST['website'])) jsonError('Spam détecté.', 400);
 
 // -----------------------------------------------------------------------------
 // reCAPTCHA v3
 // -----------------------------------------------------------------------------
-$response = $_POST['recaptcha_token'] ?? '';
-if (!$response) jsonError('Le jeton reCAPTCHA est manquant.', 400);
+$recaptchaToken = $_POST['recaptcha_token'] ?? '';
+if (!$isLocal) {
+    if (empty($recaptchaToken)) {
+        jsonError('Jeton reCAPTCHA manquant. La requête est invalide.', 400);
+    }
 
-$ch = curl_init('https://www.google.com/recaptcha/api/siteverify');
-curl_setopt_array($ch, [
-    CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_POST           => true,
-    CURLOPT_POSTFIELDS     => http_build_query([
-        'secret'   => RECAPTCHA_SECRET_KEY,
-        'response' => $response,
+    $url = 'https://www.google.com/recaptcha/api/siteverify';
+    $data = [
+        'secret' => $recaptchaSecretKey,
+        'response' => $recaptchaToken,
         'remoteip' => $ip
-    ]),
-]);
-$result = curl_exec($ch);
-curl_close($ch);
+    ];
 
-$data = json_decode($result, true);
-if (empty($data['success']) || $data['score'] < 0.5) {
-    jsonError('Erreur reCAPTCHA : veuillez réessayer plus tard ou contacter GPX PC.', 400);
+    $ch = curl_init();
+    curl_setopt_array($ch, [
+        CURLOPT_URL => $url,
+        CURLOPT_POST => true,
+        CURLOPT_POSTFIELDS => http_build_query($data),
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_TIMEOUT => 10
+    ]);
+
+    $response = curl_exec($ch);
+    $err = curl_error($ch);
+    curl_close($ch);
+
+    if ($err) {
+        error_log("Erreur cURL reCAPTCHA : {$err}");
+        jsonError('Erreur de vérification reCAPTCHA.', 500);
+    }
+
+    $recaptchaResponse = json_decode($response, true);
+    $recaptchaScore = $recaptchaResponse['score'] ?? 0;
+
+    if (!$recaptchaResponse['success'] || $recaptchaScore < 0.5) {
+        $fail['count']++;
+        error_log("Tentative de bot détectée ! Score : {$recaptchaScore}, IP: {$ip}");
+        jsonError('Spam détecté.', 400);
+    }
+} else {
+    // ✅ En local, on simule un score correct
+    $recaptchaScore = 1;
 }
 
 // -----------------------------------------------------------------------------
@@ -163,7 +198,7 @@ if (!$email || mb_strlen($email) > MAX_FIELD_LENGTHS['email'] || !filter_var($em
 }
 
 // -----------------------------------------------------------------------------
-// TRAITEMENT SELON LE TYPE DE FORMULAIRE
+// TRAITEMENT FORMULAIRES
 // -----------------------------------------------------------------------------
 switch ($formType) {
     case 'devis':
@@ -177,11 +212,9 @@ switch ($formType) {
         $boitier    = trim($_POST['boitier'] ?? '');
         $proUsage   = $_POST['pro_usage'] ?? [];
 
-        if (!is_numeric($budget) || (int)$budget <= 0) {
-            jsonError('Budget invalide.', 400);
-        }
-
+        if (!is_numeric($budget) || (int)$budget <= 0) jsonError('Budget invalide.', 400);
         validateFieldLength($details, 'Détails du projet', MAX_FIELD_LENGTHS['details']);
+
         foreach (['resolution' => $resolution, 'rgb' => $rgb, 'theme' => $theme, 'processeur' => $cpuBrand, 'carte graphique' => $gpuBrand, 'boîtier' => $boitier] as $label => $val) {
             validateFieldLength($val, ucfirst($label), MAX_FIELD_LENGTHS['osType']);
         }
@@ -214,13 +247,12 @@ switch ($formType) {
     case 'contact':
         $message = trim($_POST['message'] ?? '');
         validateFieldLength($message, 'Message', MAX_FIELD_LENGTHS['message']);
-
         $subject = 'Message depuis le formulaire de contact';
         $htmlContent = "
             <h2>Nouveau message de contact</h2>
-            <p><strong>Nom:</strong> " . htmlspecialchars($name) . "</p>
-            <p><strong>Email:</strong> " . htmlspecialchars($email) . "</p>
-            <p><strong>Téléphone:</strong> " . htmlspecialchars($phone) . "</p>
+            <p><strong>Nom:</strong>" . htmlspecialchars($name) . "</p>
+            <p><strong>Email:</strong>" . htmlspecialchars($email) . "</p>
+            <p><strong>Téléphone:</strong>" . htmlspecialchars($phone) . "</p>
             <h3>Message :</h3><p>" . nl2br(htmlspecialchars($message)) . "</p>
         ";
         break;
@@ -228,20 +260,17 @@ switch ($formType) {
     case 'reparation':
         $message = trim($_POST['message'] ?? '');
         $pcType  = trim($_POST['pc_type'] ?? '');
-
         validateFieldLength($message, 'Message', MAX_FIELD_LENGTHS['message']);
         validateFieldLength($pcType, 'Type de PC', MAX_FIELD_LENGTHS['pc_type']);
-
         $serviceList = $services ? '<ul><li>' . implode('</li><li>', array_map('htmlspecialchars', $services)) . '</li></ul>' : 'Aucun service supplémentaire sélectionné.';
-
         $subject = 'Demande de réparation depuis le site GPX PC';
         $htmlContent = "
             <h2>Nouvelle demande de réparation</h2>
-            <p><strong>Nom:</strong> " . htmlspecialchars($name) . "</p>
-            <p><strong>Email:</strong> " . htmlspecialchars($email) . "</p>
-            <p><strong>Téléphone:</strong> " . htmlspecialchars($phone) . "</p>
+            <p><strong>Nom:</strong>" . htmlspecialchars($name) . "</p>
+            <p><strong>Email:</strong>" . htmlspecialchars($email) . "</p>
+            <p><strong>Téléphone:</strong>" . htmlspecialchars($phone) . "</p>
             <h3>Informations :</h3>
-            <ul><li><strong>Type de PC:</strong> " . htmlspecialchars($pcType) . "</li></ul>
+            <ul><li><strong>Type de PC:</strong>" . htmlspecialchars($pcType) . "</li></ul>
             <h3>Services souhaités :</h3>{$serviceList}
             <h3>Message :</h3><p>" . nl2br(htmlspecialchars($message)) . "</p>
         ";
@@ -262,23 +291,34 @@ $payload = [
     'htmlContent' => $htmlContent
 ];
 
+// Debug
+error_log("Payload Brevo : " . json_encode($payload));
+
 $ch = curl_init('https://api.brevo.com/v3/smtp/email');
 curl_setopt_array($ch, [
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_POST           => true,
     CURLOPT_HTTPHEADER     => [
-        'api-key: '      . $brevoApiKey,
+        'api-key: ' . $brevoApiKey,
         'Content-Type: application/json'
     ],
     CURLOPT_POSTFIELDS     => json_encode($payload),
-    CURLOPT_TIMEOUT        => 15
+    CURLOPT_TIMEOUT        => 30
 ]);
 
 $response = curl_exec($ch);
 $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+if ($response === false) {
+    $err = curl_error($ch);
+    curl_close($ch);
+    error_log("Erreur cURL Brevo : $err");
+    jsonError('Erreur interne de connexion à l’API Brevo.', 500);
+}
+
 curl_close($ch);
 
-if ($httpCode === 201) {
+if (in_array($httpCode, [200, 201])) {
     unset($_SESSION['failed'][$ip]);
     $_SESSION['last_submit'] = time();
     jsonSuccess('Message envoyé avec succès !');

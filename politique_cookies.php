@@ -1,64 +1,48 @@
 <?php
 $pageTitle = "Politique de Cookies - GPX PC";
-$pageDescription = "Informations sur l'utilisation des cookies sur le site de GPX PC et comment gérer vos préférences.";
+$pageDescription = "Découvrez notre politique d'utilisation des cookies et apprenez à gérer votre consentement pour une navigation optimale sur GPX PC.";
 include 'header.php';
 ?>
 
-<main class="container mx-auto px-4 py-12">
-    <h1 class="text-4xl font-bold mb-8">Politique de Cookies</h1>
+<main class="container mx-auto px-4 py-12" itemscope itemtype="https://schema.org/Article">
+    <h1 class="text-4xl font-bold mb-8" itemprop="headline">Politique de Cookies</h1>
 
-    <div class="prose dark:prose-invert max-w-none text-gray-700 dark:text-gray-300 leading-relaxed">
-
+    <div class="prose dark:prose-invert max-w-none text-gray-700 dark:text-gray-300 leading-relaxed" itemprop="articleBody">
         <p>
-            Afin d’assurer le bon fonctionnement de notre site et d’améliorer votre expérience de navigation,
-            <strong>GPX PC</strong> utilise des cookies.
-            Cette politique vous explique ce que sont les cookies et comment nous les utilisons.
+            GPX PC (<strong>Gaming Power Xperience PC</strong>) utilise des cookies pour améliorer votre expérience utilisateur et pour l’analyse de l’audience. Cette politique explique comment nous utilisons ces technologies et comment vous pouvez les gérer.
         </p>
 
-        <h2 id="definition">1. Qu’est-ce qu’un cookie&nbsp;?</h2>
+        <h2 id="quest-ce-quun-cookie">1. Qu'est-ce qu'un cookie ?</h2>
         <p>
-            Un cookie est un petit fichier texte déposé sur votre appareil
-            (ordinateur, smartphone, tablette) lorsque vous visitez un site web.
-            Il contient des informations sur votre navigation.
+            Un cookie est un petit fichier texte déposé sur votre appareil (ordinateur, mobile, tablette) par le navigateur lorsque vous visitez un site web. Il permet au site de mémoriser certaines informations vous concernant, comme vos préférences, ou de vous reconnaître lors de votre prochaine visite.
         </p>
 
-        <h2 id="types">2. Les cookies utilisés sur ce site</h2>
+        <h2 id="types-de-cookies">2. Types de cookies utilisés</h2>
+        <p>Nous utilisons les types de cookies suivants sur notre site :</p>
+        <ul class="list-disc pl-6">
+            <li>
+                <strong>Cookies techniques (obligatoires) :</strong> Essentiels au bon fonctionnement du site. Ils permettent, par exemple, de maintenir votre session ou d'afficher le site correctement. Ils ne nécessitent pas votre consentement.
+            </li>
+            <li>
+                <strong>Cookies de mesure d'audience (facultatifs) :</strong> Ces cookies nous aident à analyser l'utilisation de notre site, comme les pages visitées et la durée de la visite. Les données sont anonymisées pour nous permettre d'améliorer notre site sans vous identifier.
+            </li>
+            <li>
+                <strong>Cookies publicitaires (facultatifs) :</strong> Ils sont utilisés pour vous proposer du contenu et des publicités personnalisés, en fonction de vos centres d'intérêt et de votre navigation sur notre site.
+            </li>
+        </ul>
+
+        <h2 id="gestion-du-consentement">3. Gestion de votre consentement</h2>
         <p>
-            Nous n’utilisons que des <strong>cookies techniques et de sécurité</strong>.
-            Ils sont indispensables au bon fonctionnement du site et ne peuvent pas être désactivés.
-            Nous ne collectons <strong>aucune information personnelle</strong> via ces cookies.
+            Conformément au RGPD, nous vous demandons votre consentement pour l’utilisation des cookies non-techniques. Vous pouvez accepter ou refuser ces cookies lors de votre première visite via notre bannière de consentement.
+        </p>
+        <p>
+            Vous pouvez à tout moment modifier vos préférences ou retirer votre consentement en visitant notre <a href="/gestion-cookies.php" class="text-blue-600 hover:underline">page de gestion des cookies</a> ou en ajustant les paramètres de votre navigateur.
         </p>
 
-        <h3 id="recaptcha">Google reCAPTCHA</h3>
+        <h2 id="plus-d-informations">4. Pour plus d'informations</h2>
         <p>
-            Nous utilisons le service <strong>Google reCAPTCHA</strong> pour sécuriser nos formulaires de contact et de devis.
-            Ce service est conçu pour distinguer les utilisateurs humains des robots afin de prévenir le spam.
-            Google reCAPTCHA dépose des cookies pour effectuer ses analyses,
-            et ces cookies sont nécessaires au bon fonctionnement de notre système de sécurité.
+            Pour toute question sur notre politique d'utilisation des cookies, vous pouvez nous contacter à l'adresse suivante : <a href="mailto:gpxpc13@gmail.com" class="text-blue-600 hover:underline">gpxpc13@gmail.com</a>.
         </p>
-        <p>
-            Pour en savoir plus, consultez la
-            <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">Politique de Confidentialité</a>
-            et les
-            <a href="https://policies.google.com/terms" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">Conditions d’Utilisation</a>
-            de Google.
-        </p>
-
-        <h2 id="consentement">3. Votre consentement</h2>
-        <p>
-            En naviguant sur notre site et en utilisant nos formulaires, vous acceptez l’utilisation de ces cookies de sécurité.
-            Un <strong>bandeau d’information</strong> est présent sur le site pour vous en informer.
-        </p>
-
-        <h2 id="gestion">4. Gestion des cookies</h2>
-        <p>
-            Vous pouvez à tout moment gérer les cookies dans les paramètres de votre navigateur web.
-            Cependant, veuillez noter que la désactivation des cookies essentiels,
-            comme ceux utilisés par <strong>Google reCAPTCHA</strong>,
-            peut impacter le bon fonctionnement de certaines parties de notre site,
-            notamment la soumission des formulaires.
-        </p>
-
     </div>
 </main>
 

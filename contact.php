@@ -75,6 +75,35 @@ include 'header.php';
         <p class="text-lg sm:text-xl text-gray-500 dark:text-gray-400 max-w-xl mx-auto">
           Contactez GPX PC pour vos questions sur le montage, la réparation ou l’entretien d’ordinateurs à Marseille.
         </p>
+
+        <div class="mt-8 flex flex-col items-center text-center text-gray-600 dark:text-gray-400">
+          <p class="font-semibold text-lg mb-2">Informations de contact de GPX PC</p>
+          <div class="flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
+
+            <!-- Email version desktop -->
+            <span class="hidden sm:flex items-center gap-2">
+              📧 <a href="mailto:gpxpc13@gmail.com" class="hover:underline">gpxpc13@gmail.com</a>
+            </span>
+
+            <!-- Email version mobile (gros bouton CTA) -->
+            <a href="mailto:gpxpc13@gmail.com"
+              class="sm:hidden w-full mt-2 px-6 py-3 bg-[#3857cb] dark:bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-[#2c469f] dark:hover:bg-blue-600 transition text-center">
+              📧 Envoyer un email
+            </a>
+
+            <!-- Téléphone version desktop -->
+            <span class="hidden sm:flex items-center gap-2">
+              📞 <a href="tel:+33652152999" class="hover:underline">06 52 15 29 99</a>
+            </span>
+
+            <!-- Téléphone version mobile (gros bouton CTA) -->
+            <a href="tel:+33652152999"
+              class="sm:hidden w-full mt-2 px-6 py-3 bg-[#3857cb] dark:bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-[#2c469f] dark:hover:bg-blue-600 transition text-center">
+              📞 Appeler maintenant
+            </a>
+          </div>
+        </div>
+
       </div>
 
       <div class="px-6 pb-12">

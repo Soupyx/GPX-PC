@@ -6,7 +6,7 @@ $pcs = [
     'Gamer - NVIDIA' => [
         [
             'name' => 'NVIDIA - Config 1',
-            'price' => 859,
+            'price' => 959.99,
             'components' => [
                 'Processeur : Ryzen 5 5600',
                 'Carte graphique : MSI GeForce RTX 5060 8G VENTUS 2X OC',
@@ -20,7 +20,7 @@ $pcs = [
             'main_specs' => [
                 'Processeur : Ryzen 5 5600',
                 'Carte graphique : RTX 5060',
-                'RAM : 2x8Go DDR4',
+                'RAM : 2x8Go DDR4 3200 CL16',
                 'Carte mère : MSI MPG B550 Gaming Plus',
                 "Ventirad : Ventirad d'origine",
                 'Stockage : SSD SATA III 1To',
@@ -31,10 +31,10 @@ $pcs = [
         ],
         [
             'name' => 'NVIDIA - Config 2',
-            'price' => 1079.65,
+            'price' => 1229.99,
             'components' => [
                 'Processeur : Intel Core i5‑14400F',
-                'Carte graphique : Asus DUAL GeForce RTX 5060 Ti 8 Go GDDR7 OC Edition',
+                'Carte graphique : Asus DUAL GeForce RTX 5060 Ti 8 GB GDDR7 OC Edition',
                 'RAM : Kingston Fury Beast RGB DDR5 6000 MHz CL30 – 2×8 Go',
                 'Carte mère : Gigabyte B760 GAMING X AX (DDR5, Wi‑Fi 6E)',
                 'Ventirad : Thermalright Assassin X 120 Refined SE ARGB – Noir',
@@ -44,8 +44,8 @@ $pcs = [
             ],
             'main_specs' => [
                 'Processeur : i5‑14400F',
-                'Carte graphique : RTX 5060 Ti',
-                'RAM : 2x8Go DDR5',
+                'Carte graphique : RTX 5060 Ti 8GB',
+                'RAM : 2x8Go DDR5 6000 CL30',
                 'Carte mère : Gigabyte B760 GAMING X AX',
                 'Ventirad : Thermalright Assassin X 120',
                 'Stockage : SSD NVMe 1To',
@@ -56,7 +56,7 @@ $pcs = [
         ],
         [
             'name' => 'NVIDIA - Config 3',
-            'price' => 1439.60,
+            'price' => 1549.99,
             'components' => [
                 'Processeur : AMD Ryzen 5 9600X',
                 'Carte graphique : Asus DUAL GeForce RTX 5060 Ti 16GB GDDR7 OC Edition',
@@ -69,8 +69,8 @@ $pcs = [
             ],
             'main_specs' => [
                 'Processeur : Ryzen 5 9600X',
-                'Carte graphique : RTX 5060 Ti',
-                'RAM : 2x16Go DDR5',
+                'Carte graphique : RTX 5060 Ti 16GB',
+                'RAM : 2x16Go DDR5 6000 CL30',
                 'Carte mère : MSI B850M GAMING PLUS',
                 'Refroidissement : be quiet! Pure Rock Pro 3',
                 'Stockage : SSD NVMe 1To',
@@ -81,7 +81,7 @@ $pcs = [
         ],
         [
             'name' => 'NVIDIA - Config 4',
-            'price' => 1890.60,
+            'price' => 1839.99,
             'components' => [
                 'Processeur : Intel Core Ultra 7 265KF',
                 'Carte graphique : Asus DUAL GeForce RTX 5070 12GB GDDR7 OC',
@@ -106,7 +106,7 @@ $pcs = [
         ],
         [
             'name' => 'NVIDIA - Config 5',
-            'price' => 2341.60,
+            'price' => 2259.99,
             'components' => [
                 'Processeur : AMD Ryzen 7 9800X3D (4.7 GHz)',
                 'Carte graphique : MSI GeForce RTX 5070 Ti 16G VENTUS 3X OC',
@@ -131,7 +131,7 @@ $pcs = [
         ],
         [
             'name' => 'NVIDIA - Config 6',
-            'price' => 4575.60,
+            'price' => 4559.99,
             'components' => [
                 'Processeur : AMD Ryzen 9 9950X3D',
                 'Carte graphique : Asus ROG Astral GeForce RTX 5080 16GB GDDR7 OC Edition',
@@ -162,10 +162,10 @@ $pcs = [
     'Gamer - AMD' => [
         [
             'name' => 'AMD - Config 1',
-            'price' => 887.65,
+            'price' => 969.99,
             'components' => [
                 'Processeur : Ryzen 5 5600',
-                'Carte graphique : AMD Radeon RX 9060XT 8Go',
+                'Carte graphique : XFX AMD Radeon RX 9060XT 8Go',
                 'RAM : Lexar THOR 2 x 8Go DDR4 3200MHz CL16',
                 'Carte mère : MSI MPG B550 Gaming Plus (ATX)',
                 "Ventirad : Ventirad d'origine",
@@ -187,10 +187,10 @@ $pcs = [
         ],
         [
             'name' => 'AMD - Config 2',
-            'price' => 1079.65,
+            'price' => 1149.99,
             'components' => [
                 'Processeur : Intel Core i5‑14400F',
-                'Carte graphique : AMD Radeon RX 9060 XT 8Go',
+                'Carte graphique : Swift AMD Radeon RX 9060 XT 8Go',
                 'RAM : Kingston Fury Beast RGB DDR5 6000 MHz – 2×8 Go',
                 'Carte mère : Gigabyte B760 GAMING X AX (DDR5, Wi‑Fi 6E)',
                 'Ventirad : Thermalright Assassin X 120 Refined SE ARGB – Noir',
@@ -212,10 +212,10 @@ $pcs = [
         ],
         [
             'name' => 'AMD - Config 3',
-            'price' => 1439.60,
+            'price' => 1449.99,
             'components' => [
                 'Processeur : AMD Ryzen 5 9600X',
-                'Carte graphique : AMD Radeon RX 9060 XT 16 Go',
+                'Carte graphique : Swift AMD Radeon RX 9060 XT 16 Go',
                 'RAM : Kingston Fury Beast RGB 2 x 16 Go DDR5 6000 MHz CL30',
                 'Carte mère : MSI B850M GAMING PLUS WIFI6E',
                 'Refroidissement : be quiet! Pure Rock Pro 3 LX',
@@ -237,10 +237,10 @@ $pcs = [
         ],
         [
             'name' => 'AMD - Config 4',
-            'price' => 1890.60,
+            'price' => 1849,99,
             'components' => [
                 'Processeur : Intel Core Ultra 7 265KF',
-                'Carte graphique : AMD Radeon RX 7800 XT',
+                'Carte graphique : Swift AMD Radeon RX 7800 XT',
                 'RAM : Kingston Fury Beast RGB 2 x 16 Go DDR5 6000 MHz CL30',
                 'Carte mère : MSI PRO B860-P WIFI',
                 'Refroidissement : Arctic Liquid Freezer III Pro 280 ARGB - Noir',
@@ -262,7 +262,7 @@ $pcs = [
         ],
         [
             'name' => 'AMD - Config 5',
-            'price' => 2341.60,
+            'price' => 2149.99,
             'components' => [
                 'Processeur : AMD Ryzen 7 9800X3D',
                 'Carte graphique : AMD Radeon RX 9070',
@@ -287,10 +287,10 @@ $pcs = [
         ],
         [
             'name' => 'AMD - Config 6',
-            'price' => 4575.60,
+            'price' => 3979,99,
             'components' => [
                 'Processeur : AMD Ryzen 9 9950X3D',
-                'Carte graphique : AMD Radeon RX 7900 XTX',
+                'Carte graphique : Speedster Radeon RX 7900 XTX',
                 'RAM : Corsair Vengeance RGB Black 2 x 32 Go DDR5 6000 MHz CL28',
                 'Carte mère : Asus ROG STRIX X870E-E GAMING WIFI',
                 'Refroidissement : ASUS Ryujin III 360 ARGB Extreme',
@@ -318,24 +318,24 @@ $pcs = [
     'Streaming / Montage / IA / Rendu 3D' => [
         [
             'name' => 'Streaming - Config 1',
-            'price' => 2511.60,
+            'price' => 2459.99,
             'components' => [
-                'Processeur : Intel Core Ultra 5 245K',
-                'Carte graphique : MSI GeForce RTX 5070 Ti 16G VENTUS 3X OC',
+                'Processeur : Intel Core Ultra 5 245KF',
+                'Carte graphique : MSI GeForce RTX 5070 Ti 16G Shadow 3X OC',
                 'RAM : Corsair Vengeance Black - 2 x 16 Go DDR5 6000 MHz CL28',
                 'Carte mère : Asus ROG STRIX Z890-F GAMING WIFI',
-                'Refroidissement : Arctic Liquid Freezer III Pro 280 - Noir',
+                'Refroidissement : Arctic Liquid Freezer III Pro 360 - Noir',
                 'Stockage : Samsung 9100 PRO avec dissipateur - 2 To',
                 'Alimentation : Corsair RM850e (2025) - Noir',
                 'Boîtier : Cooler Master MasterBox 600'
             ],
             'main_specs' => [
-                'Processeur : Intel Core Ultra 5 245K',
+                'Processeur : Intel Core Ultra 5 245KF',
                 'Carte graphique : RTX 5070 Ti',
                 'RAM : 2x16Go DDR5',
                 'Carte mère : Asus ROG STRIX Z890-F',
                 'Stockage : SSD NVMe 2To',
-                'Refroidissement : Arctic Liquid Freezer III Pro 280',
+                'Refroidissement : Arctic Liquid Freezer III Pro 360',
                 'Alimentation : Corsair RM850e',
                 'Boîtier : Cooler Master MasterBox 600'
             ],
@@ -343,7 +343,7 @@ $pcs = [
         ],
         [
             'name' => 'Streaming - Config 2',
-            'price' => 3174.60,
+            'price' => 2719.99,
             'components' => [
                 'Processeur : Intel Core Ultra 7 265KF',
                 'Carte graphique : MSI GeForce RTX 5080 16G VENTUS 3X OC PLUS',
@@ -368,19 +368,19 @@ $pcs = [
         ],
         [
             'name' => 'Streaming - Config 3',
-            'price' => 5709.50,
+            'price' => 6799.99,
             'components' => [
-                'Processeur : Intel Core Ultra 9 285',
-                'Carte graphique : MSI GeForce RTX 5090 32G VENTUS 3X OC',
+                'Processeur : Intel Core Ultra 9 285K',
+                'Carte graphique : MSI GeForce RTX 5090 32G GAMING TRIO OC',
                 'RAM : Corsair Vengeance Black - 2 x 32 Go DDR5 6000 MHz CL30',
                 'Carte mère : Asus ROG STRIX Z890-E GAMING WIFI',
                 'Refroidissement : Arctic Liquid Freezer III Pro 420 - Noir',
-                'Stockage : Samsung 9100 PRO - 4 To',
+                'Stockage : Samsung 9100 PRO avec dissipateur - 4 To',
                 'Alimentation : MSI MAG A1250GL PCIE5',
                 'Boîtier : NZXT H9 Flow RGB+ Noir - 2025'
             ],
             'main_specs' => [
-                'Processeur : Intel Core Ultra 9 285',
+                'Processeur : Intel Core Ultra 9 285K',
                 'Carte graphique : RTX 5090',
                 'RAM : 2x32Go DDR5',
                 'Carte mère : Asus ROG STRIX Z890-E',
@@ -399,7 +399,7 @@ $pcs = [
     'Bureautique' => [
         [
             'name' => 'Bureautique - Config 1',
-            'price' => 415.25,
+            'price' => 539.99,
             'components' => [
                 'Processeur : Intel Core i3-14100',
                 'Carte graphique : Intel UHD intégrée',
@@ -424,11 +424,11 @@ $pcs = [
         ],
         [
             'name' => 'Bureautique - Config 2',
-            'price' => 506.70,
+            'price' => 589.99,
             'components' => [
-                'Processeur : Intel Core i5 12400',
+                'Processeur : Intel Core i5 14400',
                 'Carte graphique : Intel UHD intégrée',
-                'RAM : G.Skill Ripjaws V Black - 2 x 8 Go DDR4 3200 MHz CL16',
+                'RAM : G.Skill Aegis V Black - 2 x 8 Go DDR4 3200 MHz CL16',
                 'Carte mère : MSI PRO H610M-E DDR4',
                 'Refroidissement : Refroidissement d\'origine',
                 'Stockage : Silicon Power SSD 3D NAND A55 SLC, 500Go (SATA III)',
@@ -436,7 +436,7 @@ $pcs = [
                 'Boîtier : AeroCool CS-109 - Noir'
             ],
             'main_specs' => [
-                'Processeur : Intel Core i5 12400',
+                'Processeur : Intel Core i5 14400',
                 'Carte graphique : Intel UHD intégrée',
                 'RAM : 2x8Go DDR4',
                 'Carte mère : MSI PRO H610M-E DDR4',
@@ -449,7 +449,7 @@ $pcs = [
         ],
         [
             'name' => 'Bureautique - Config 3',
-            'price' => 601.70,
+            'price' => 639.99,
             'components' => [
                 'Processeur : Intel Core i5-14400',
                 'Carte graphique : Intel UHD intégrée',

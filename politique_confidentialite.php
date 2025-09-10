@@ -1,14 +1,12 @@
 <?php
 $pageTitle = "Politique de Confidentialité - GPX PC";
-$pageDescription = "Informations sur la collecte et le traitement des données personnelles sur GPX PC, conformément au RGPD.";
+$pageDescription = "Informations sur la collecte et le traitement des données personnelles sur GPX PC, en conformité avec le RGPD.";
 include 'header.php';
 ?>
 
-<main class="container mx-auto px-4 py-12">
-    <h1 class="text-4xl font-bold mb-8">Politique de Confidentialité</h1>
-
-    <div class="prose dark:prose-invert max-w-none text-gray-700 dark:text-gray-300 leading-relaxed">
-
+<main class="container mx-auto px-4 py-12" itemscope itemtype="https://schema.org/Article">
+    <h1 class="text-4xl font-bold mb-8" itemprop="headline">Politique de Confidentialité</h1>
+    <div class="prose dark:prose-invert max-w-none text-gray-700 dark:text-gray-300 leading-relaxed" itemprop="articleBody">
         <p>
             GPX PC (<strong>Gaming Power Xperience PC</strong>), édité par M. Baptiste Soupy,
             respecte la vie privée de ses utilisateurs et s’engage à protéger leurs données personnelles.
@@ -65,7 +63,6 @@ include 'header.php';
             Pour les exercer, contactez :
             <a href="mailto:gpxpc13@gmail.com" class="text-blue-600 hover:underline">gpxpc13@gmail.com</a>.
         </p>
-
     </div>
 </main>
 
